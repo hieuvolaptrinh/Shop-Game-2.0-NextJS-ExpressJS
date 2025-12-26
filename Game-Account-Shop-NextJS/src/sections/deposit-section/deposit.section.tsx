@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
 import {
   Wallet,
   CheckCircle,
@@ -18,7 +17,7 @@ import DepositResultModal from "@/components/modals/deposit.result.modal";
 import { createDepositRequest } from "@/apis/request-deposit.api";
 
 import { useAuth } from "@/contexts/auth.context";
-import { useRouter } from "@/i18n/navigation";
+import { useRouter } from "next/navigation";
 import { ROUTES } from "@/routes";
 
 export interface Bank {
@@ -46,7 +45,6 @@ export const banksList: Bank[] = [
 ];
 
 function DepositSection() {
-  const t = useTranslations("deposit");
 
   const [selectedBank, setSelectedBank] = useState<string | null>(null);
   const [depositAmount, setDepositAmount] = useState<string>("");
@@ -61,7 +59,7 @@ function DepositSection() {
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      router.push(ROUTES.LOGIN as any);
+      router.push(ROUTES.LOGIN);
     }
   }, [isAuthenticated, isLoading, router]);
 
@@ -79,14 +77,14 @@ function DepositSection() {
 
   const handleSubmit = async () => {
     if (!selectedBank || !depositAmount || !uploadedFile) {
-      alert("Please fill in all required information!");
+      alert("Vui lòng nhập đầy đủ thông tin!");
       return;
     }
     setIsProcessing(true);
     try {
-      const description = `Deposit $${Number(depositAmount).toLocaleString(
+      const description = `Nạp ${Number(depositAmount).toLocaleString(
         "en-US"
-      )} via ${selectedBankData?.name}`;
+      )}$ qua ${selectedBankData?.name}`;
       const res = await createDepositRequest({
         description,
         billImage: uploadedFile,
@@ -95,10 +93,10 @@ function DepositSection() {
         setDepositResult(res.data);
         setModalOpen(true);
       } else {
-        alert(res.message || "An error occurred, please try again!");
+        alert(res.message || "Đã có lỗi xảy ra, vui lòng thử lại!");
       }
     } catch (err: any) {
-      alert(err?.message || "An error occurred, please try again!");
+      alert(err?.message || "Đã có lỗi xảy ra, vui lòng thử lại!");
     } finally {
       setIsProcessing(false);
     }
@@ -122,7 +120,7 @@ function DepositSection() {
         </div>
         <div className="text-center">
           <Wallet className="w-12 h-12 text-blue-400 animate-spin mx-auto mb-4" />
-          <p className="text-white text-lg">{t("loading") || "Loading..."}</p>
+          <p className="text-white text-lg">Đang tải...</p>
         </div>
       </div>
     );
@@ -159,9 +157,9 @@ function DepositSection() {
         <div className="mb-6 sm:mb-8">
           <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2 flex items-center gap-2">
             <Wallet className="w-6 h-6 sm:w-8 sm:h-8 text-blue-400" />
-            <span>{t("title")}</span>
+            <span>Nạp Tiền Vào Tài Khoản</span>
           </h1>
-          <p className="text-gray-400 text-sm sm:text-base">{t("subtitle")}</p>
+          <p className="text-gray-400 text-sm sm:text-base">Nạp tiền nhanh chóng qua các cổng thanh toán an toàn</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -171,13 +169,13 @@ function DepositSection() {
             <div className="bg-[#1a1d29] rounded-xl border border-[#2a2d3a] p-4 sm:p-6">
               <h2 className="text-lg sm:text-xl font-bold text-white mb-4 flex items-center gap-2">
                 <DollarSign className="w-5 h-5 text-green-400" />
-                {t("enter_amount")}
+                Nhập số tiền muốn nạp
               </h2>
 
               <div className="space-y-4">
                 <div>
                   <label className="text-gray-400 text-xs sm:text-sm mb-2 block">
-                    {t("amount_label")}
+                    Số tiền ($)
                   </label>
                   <div className="relative">
                     <input
@@ -196,7 +194,7 @@ function DepositSection() {
                 {/* Quick Amount Buttons */}
                 <div>
                   <label className="text-gray-400 text-xs sm:text-sm mb-2 block">
-                    {t("quick_amount")}
+                    Chọn nhanh số tiền
                   </label>
                   <div className="grid grid-cols-3 gap-2">
                     {quickAmounts.map((amount) => (
@@ -216,7 +214,7 @@ function DepositSection() {
             {/* Bank Selection */}
             <div className="bg-[#1a1d29] rounded-xl border border-[#2a2d3a] p-4 sm:p-6">
               <h2 className="text-lg sm:text-xl font-bold text-white mb-4">
-                {t("select_bank")}
+                Chọn phương thức thanh toán
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {banksList.map((bank) => (
@@ -264,7 +262,7 @@ function DepositSection() {
             {selectedBankData && depositAmount && Number(depositAmount) > 0 && (
               <div className="bg-[#1a1d29] rounded-xl border border-[#2a2d3a] p-4 sm:p-6">
                 <h2 className="text-lg sm:text-xl font-bold text-white mb-4">
-                  {t("payment_details")}
+                  Thông tin chuyển khoản
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* QR Code or Info */}
@@ -275,7 +273,7 @@ function DepositSection() {
                     />
                     {selectedBankData.qrImage && (
                       <p className="text-gray-400 text-xs sm:text-sm text-center mt-3">
-                        {t("scan_qr")}
+                        Quét mã để thanh toán nhanh hơn
                       </p>
                     )}
                   </div>
@@ -284,7 +282,7 @@ function DepositSection() {
                   <div className="space-y-4">
                     <div>
                       <label className="text-gray-400 text-xs mb-1 block">
-                        {t("bank_name")}
+                        Tên đơn vị/Ví
                       </label>
                       <div className="bg-[#16171f] p-3 rounded-lg">
                         <p className="text-white font-semibold text-sm sm:text-base">
@@ -297,7 +295,7 @@ function DepositSection() {
                       <label className="text-gray-400 text-xs mb-1 block">
                         {selectedBankData.id === "skrill"
                           ? "Email"
-                          : t("account_number")}
+                          : "Số tài khoản"}
                       </label>
                       <div className="bg-[#16171f] p-3 rounded-lg flex items-center justify-between">
                         <p className="text-white font-mono font-semibold text-sm sm:text-base break-all">
@@ -322,7 +320,7 @@ function DepositSection() {
                     </div>
                     <div>
                       <label className="text-gray-400 text-xs mb-1 block">
-                        {t("transfer_amount")}
+                        Số tiền cần chuyển
                       </label>
                       <div className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/30 p-3 rounded-lg flex items-center justify-between">
                         <p className="text-blue-400 font-bold text-lg sm:text-xl">
@@ -343,7 +341,7 @@ function DepositSection() {
 
                     <div>
                       <label className="text-gray-400 text-xs mb-1 block">
-                        {t("transfer_content")}
+                        Nội dung chuyển khoản
                       </label>
                       <div className="bg-[#16171f] p-3 rounded-lg flex items-center justify-between">
                         <p className="text-white font-mono text-xs sm:text-sm">
@@ -376,13 +374,13 @@ function DepositSection() {
           <div className="lg:col-span-1">
             <div className="bg-[#1a1d29] rounded-xl border border-[#2a2d3a] p-4 sm:p-6 sticky top-4">
               <h2 className="text-lg sm:text-xl font-bold text-white mb-4">
-                {t("deposit_summary")}
+                Tóm tắt yêu cầu
               </h2>
 
               <div className="space-y-4 mb-6">
                 <div className="p-4 bg-gradient-to-br from-blue-600/10 to-purple-600/10 rounded-lg border border-blue-500/20">
                   <p className="text-gray-400 text-xs mb-1">
-                    {t("amount_to_deposit")}
+                    Tổng tiền nhận
                   </p>
                   <p className="text-blue-400 font-bold text-2xl sm:text-3xl">
                     {depositAmount
@@ -393,11 +391,11 @@ function DepositSection() {
 
                 {depositAmount && Number(depositAmount) > 0 && (
                   <div className="text-xs text-gray-400 bg-[#16171f] p-3 rounded-lg">
-                    <p className="mb-2">💡 {t("deposit_note")}</p>
+                    <p className="mb-2">💡 Lưu ý quan trọng</p>
                     <ul className="space-y-1 ml-4">
-                      <li>• {t("note_1")}</li>
-                      <li>• {t("note_2")}</li>
-                      <li>• {t("note_3")}</li>
+                      <li>• Vui lòng chuyển đúng số tiền đã nhập</li>
+                      <li>• Chụp lại ảnh biên lai sau khi chuyển thành công</li>
+                      <li>• Yêu cầu sẽ được duyệt trong 1-5 phút</li>
                     </ul>
                   </div>
                 )}
@@ -417,7 +415,7 @@ function DepositSection() {
                   ) : (
                     <XCircle className="w-4 h-4" />
                   )}
-                  <span>{t("amount_entered")}</span>
+                  <span>Đã nhập số tiền</span>
                 </div>
 
                 <div
@@ -430,7 +428,7 @@ function DepositSection() {
                   ) : (
                     <XCircle className="w-4 h-4" />
                   )}
-                  <span>{t("bank_selected")}</span>
+                  <span>Đã chọn phương thức</span>
                 </div>
 
                 <div
@@ -443,7 +441,7 @@ function DepositSection() {
                   ) : (
                     <XCircle className="w-4 h-4" />
                   )}
-                  <span>{t("bill_uploaded")}</span>
+                  <span>Đã tải lên hóa đơn</span>
                 </div>
               </div>
 
@@ -467,11 +465,11 @@ function DepositSection() {
                     : "bg-gray-700 text-gray-500 cursor-not-allowed"
                 }`}
               >
-                {isProcessing ? t("loading") : t("confirm_deposit")}
+                {isProcessing ? "Đang xử lý..." : "Xác nhận đã chuyển tiền"}
               </button>
 
               <p className="text-gray-500 text-xs text-center mt-4">
-                {t("admin_review")}
+                Yêu cầu của bạn sẽ được Admin kiểm tra và duyệt sớm nhất
               </p>
             </div>
           </div>

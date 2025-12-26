@@ -32,13 +32,13 @@ function FilterDropdown({
       {/* Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full bg-[#0f1115] hover:bg-[#16171f] text-white text-sm border border-[#2a2d3a] hover:border-[#3a3d4a] focus:border-blue-500 rounded-lg px-4 py-2.5 focus:outline-none transition-all duration-200 flex items-center gap-2"
+        className="w-full bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-750 text-gray-700 dark:text-gray-200 text-sm border border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600 focus:border-blue-500 rounded-lg px-4 py-2.5 focus:outline-none transition-all duration-200 flex items-center gap-2"
       >
-        <span className="flex-1 text-left text-gray-300">
+        <span className="flex-1 text-left">
           {selectedOption?.label || label}
         </span>
         <svg
-          className={`w-4 h-4 transition-transform duration-200 text-gray-400 ${
+          className={`w-4 h-4 transition-transform duration-200 text-gray-400 dark:text-gray-500 ${
             isOpen ? "rotate-180" : ""
           }`}
           fill="none"
@@ -56,7 +56,7 @@ function FilterDropdown({
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-full bg-[#16171f] backdrop-blur-md border border-[#2a2d3a] rounded-lg shadow-2xl shadow-black/50 z-50 overflow-hidden">
+        <div className="absolute top-full left-0 mt-2 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl dark:shadow-black/50 z-50 overflow-hidden transition-colors duration-300">
           <div className="max-h-64 overflow-y-auto">
             {options.map((option) => (
               <button
@@ -67,8 +67,8 @@ function FilterDropdown({
                 }}
                 className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${
                   option.value === value
-                    ? "bg-blue-600 text-white"
-                    : "text-gray-300 hover:bg-[#2a2d3a] hover:text-white"
+                    ? "bg-primary text-primary-foreground font-bold"
+                    : "text-muted-foreground hover:bg-accent hover:text-foreground"
                 }`}
               >
                 {option.label}

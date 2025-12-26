@@ -7,7 +7,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useTranslations } from "next-intl";
 import { Wallet, Upload, CheckCircle, ShoppingCart, Gift } from "lucide-react";
 
 interface BuyingGuideModalProps {
@@ -16,43 +15,42 @@ interface BuyingGuideModalProps {
 }
 
 function BuyingGuideModal({ open, onOpenChange }: BuyingGuideModalProps) {
-  const t = useTranslations("buyingGuide");
 
   const steps = [
     {
       icon: Wallet,
       iconColor: "text-blue-500",
       bgColor: "bg-blue-500/10",
-      title: t("step1Title"),
-      description: t("step1Description"),
+      title: "Nhập số tiền muốn nạp",
+      description: "Chọn số tiền và phương thức thanh toán phù hợp (Nạp card hoặc Chuyển khoản).",
     },
     {
       icon: Upload,
       iconColor: "text-purple-500",
       bgColor: "bg-purple-500/10",
-      title: t("step2Title"),
-      description: t("step2Description"),
+      title: "Thanh toán & Chụp bill",
+      description: "Thực hiện thanh toán theo thông tin hiển thị và chụp lại ảnh biên lai thành công.",
     },
     {
       icon: CheckCircle,
       iconColor: "text-green-500",
       bgColor: "bg-green-500/10",
-      title: t("step3Title"),
-      description: t("step3Description"),
+      title: "Gửi yêu cầu & Đợi duyệt",
+      description: "Tải ảnh bill lên hệ thống. Admin sẽ kiểm tra và cộng tiền vào tài khoản của bạn trong 1-5 phút.",
     },
     {
       icon: ShoppingCart,
       iconColor: "text-orange-500",
       bgColor: "bg-orange-500/10",
-      title: t("step4Title"),
-      description: t("step4Description"),
+      title: "Chọn Nick & Mua hàng",
+      description: "Tìm kiếm tài khoản game bạn yêu thích, chọn 'Mua ngay' và xác nhận thanh toán bằng số dư.",
     },
     {
       icon: Gift,
       iconColor: "text-pink-500",
       bgColor: "bg-pink-500/10",
-      title: t("step5Title"),
-      description: t("step5Description"),
+      title: "Nhận tài khoản ngay",
+      description: "Sau khi xác nhận, thông tin tài khoản sẽ hiển thị ngay lập tức trong lịch sử mua hàng của bạn.",
     },
   ];
 
@@ -62,10 +60,10 @@ function BuyingGuideModal({ open, onOpenChange }: BuyingGuideModalProps) {
         <DialogHeader className="space-y-2 sm:space-y-3">
           <DialogTitle className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
             <span className="text-2xl sm:text-3xl">⚡</span>
-            <span className="leading-tight">{t("title")}</span>
+            <span className="leading-tight">Hướng Dẫn Mua Hàng</span>
           </DialogTitle>
           <DialogDescription className="text-gray-400 text-xs sm:text-sm">
-            {t("subtitle")}
+            Chỉ với 5 bước đơn giản để sở hữu ngay tài khoản yêu thích
           </DialogDescription>
         </DialogHeader>
 
@@ -100,13 +98,13 @@ function BuyingGuideModal({ open, onOpenChange }: BuyingGuideModalProps) {
 
         <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-lg border border-blue-500/30">
           <p className="text-center text-xs sm:text-sm text-gray-300 break-words">
-            💬 {t("footer")}
+            💬 Nếu gặp bất kỳ khó khăn nào, hãy nhắn tin ngay cho Support qua Discord!
           </p>
         </div>
 
         <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-[#2a2d3a]">
           <p className="text-[10px] sm:text-xs text-gray-500 text-center break-words">
-            {t("note")}
+            Lưu ý: Mọi thông tin giao dịch đều được bảo mật tuyệt đối.
           </p>
         </div>
       </DialogContent>

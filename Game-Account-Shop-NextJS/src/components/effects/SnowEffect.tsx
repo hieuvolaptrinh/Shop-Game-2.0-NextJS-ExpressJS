@@ -24,6 +24,9 @@ export default function SnowEffect() {
     let particles: Snowflake[] = [];
     const maxParticles = 100;
 
+    // Force snow to be white for both themes
+    const snowflakeColor = "rgba(255, 255, 255, 0.7)";
+
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -37,7 +40,7 @@ export default function SnowEffect() {
           y: Math.random() * canvas.height,
           radius: Math.random() * 3 + 1, // 1-4px size
           density: Math.random() * 100, // randomized fall speed factor
-          color: "rgba(255, 255, 255, 0.8)",
+          color: snowflakeColor,
         });
       }
     };
@@ -49,7 +52,7 @@ export default function SnowEffect() {
         const p = particles[i];
         
         ctx.beginPath();
-        ctx.fillStyle = p.color;
+        ctx.fillStyle = snowflakeColor;
         ctx.moveTo(p.x, p.y);
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2, true);
         ctx.fill();
@@ -73,7 +76,7 @@ export default function SnowEffect() {
               y: -10,
               radius: p.radius,
               density: p.density,
-              color: p.color,
+              color: snowflakeColor,
             };
           } else {
             // If the flake exits from the right
@@ -83,7 +86,7 @@ export default function SnowEffect() {
                 y: Math.random() * canvas.height,
                 radius: p.radius,
                 density: p.density,
-                color: p.color,
+                color: snowflakeColor,
               };
             } else {
               particles[i] = {
@@ -91,7 +94,7 @@ export default function SnowEffect() {
                 y: Math.random() * canvas.height,
                 radius: p.radius,
                 density: p.density,
-                color: p.color,
+                color: snowflakeColor,
               };
             }
           }
@@ -119,7 +122,7 @@ export default function SnowEffect() {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 pointer-events-none z-50"
+      className="fixed inset-0 pointer-events-none z-50 opacity-80"
       style={{ top: 0, left: 0 }}
     />
   );

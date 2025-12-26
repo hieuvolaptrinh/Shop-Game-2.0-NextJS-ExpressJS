@@ -10,7 +10,6 @@ import {
   Calendar,
 } from "lucide-react";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
 import { formatCurrency } from "@/utils/payment.util";
 
 interface PurchaseCardProps {
@@ -18,7 +17,6 @@ interface PurchaseCardProps {
 }
 
 export default function PurchaseCard({ purchase }: PurchaseCardProps) {
-  const t = useTranslations("histories");
 
   const { gameAccount } = purchase;
   const game = gameAccount?.gameCategory;
@@ -54,11 +52,11 @@ export default function PurchaseCard({ purchase }: PurchaseCardProps) {
 
         <div className="flex-1">
           <h3 className="text-white font-bold text-lg leading-tight">
-            {game?.gameCategoryName || t("unknown_game")}
+            {game?.gameCategoryName || "Không xác định"}
           </h3>
           <p className="text-gray-400 text-sm">
             {gameAccount?.typeAccount
-              ? `${t("account_type_label")} ${gameAccount.typeAccount}`
+              ? `Loại: ${gameAccount.typeAccount}`
               : ""}
           </p>
           <p className="text-gray-500 text-xs mt-1">
@@ -68,7 +66,7 @@ export default function PurchaseCard({ purchase }: PurchaseCardProps) {
 
         <div className="flex items-center gap-2 bg-green-500/10 text-green-400 text-xs font-medium px-3 py-1.5 rounded-lg border border-green-500/30">
           <CheckCircle className="w-4 h-4" />
-          <span>{t("completed")}</span>
+          <span>Hoàn tất</span>
         </div>
       </div>
 
@@ -76,14 +74,14 @@ export default function PurchaseCard({ purchase }: PurchaseCardProps) {
       <div className="p-5 space-y-4">
         {/* GIÁ */}
         <div className="bg-green-500/5 border border-green-500/20 rounded-lg p-4">
-          <p className="text-gray-400 text-sm mb-1">{t("purchase_price")}</p>
+          <p className="text-gray-400 text-sm mb-1">Giá mua</p>
           <div className="flex items-baseline gap-2">
             <p className="text-3xl font-bold text-green-400">
               ${formatCurrency(gameAccount?.currentPrice || "0")}
             </p>
           </div>
           <p className="text-gray-500 text-xs mt-1">
-            {t("original_price")} $
+            Giá gốc: $
             {formatCurrency(gameAccount?.originalPrice || "0")}
           </p>
         </div>
@@ -94,7 +92,7 @@ export default function PurchaseCard({ purchase }: PurchaseCardProps) {
           <div className="bg-[#0f1115] rounded-lg p-3 border border-[#2a2d3a]">
             <div className="flex items-center gap-2 text-gray-400 text-xs mb-1">
               <Hash className="w-3.5 h-3.5" />
-              <span>{t("order_id")}</span>
+              <span>Mã đơn hàng</span>
             </div>
             <p className="text-white text-sm font-mono">
               #{purchase.orderId.toString().padStart(5, "0")}
@@ -105,7 +103,7 @@ export default function PurchaseCard({ purchase }: PurchaseCardProps) {
           <div className="bg-[#0f1115] rounded-lg p-3 border border-[#2a2d3a]">
             <div className="flex items-center gap-2 text-gray-400 text-xs mb-1">
               <FileText className="w-3.5 h-3.5" />
-              <span>{t("account_description")}</span>
+              <span>Mô tả tài khoản</span>
             </div>
             <p className="text-white text-sm leading-relaxed">
               {gameAccount?.description}
@@ -116,7 +114,7 @@ export default function PurchaseCard({ purchase }: PurchaseCardProps) {
           <div className="bg-[#0f1115] rounded-lg p-3 border border-[#2a2d3a]">
             <div className="flex items-center gap-2 text-gray-400 text-xs mb-1">
               <Tag className="w-3.5 h-3.5" />
-              <span>{t("account_type")}</span>
+              <span>Loại tài khoản</span>
             </div>
             <p className="text-white text-sm">{gameAccount?.typeAccount}</p>
           </div>
@@ -125,7 +123,7 @@ export default function PurchaseCard({ purchase }: PurchaseCardProps) {
           <div className="bg-[#0f1115] rounded-lg p-3 border border-[#2a2d3a]">
             <div className="flex items-center gap-2 text-gray-400 text-xs mb-1">
               <Calendar className="w-3.5 h-3.5" />
-              <span>{t("purchase_date")}</span>
+              <span>Ngày mua</span>
             </div>
             <p className="text-white text-sm">
               {formatDate(purchase.createdAt)}

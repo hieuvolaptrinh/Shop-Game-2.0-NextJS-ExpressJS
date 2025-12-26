@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Link } from "@/i18n/navigation";
 
 export default function HomeRoutePopup() {
   const [isOpen, setIsOpen] = useState(false);

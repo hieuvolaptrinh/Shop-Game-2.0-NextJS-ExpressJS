@@ -1,9 +1,8 @@
 "use client";
 
-import { Link } from "@/i18n/navigation";
+import Link from "next/link";
 import Image from "next/image";
 import { GameRoutes } from "@/routes";
-import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 interface TypeAccountCardProps {
@@ -27,7 +26,6 @@ function TypeAccountCard({
   available,
   sold,
 }: TypeAccountCardProps) {
-  const t = useTranslations("game.card");
   const [imageError, setImageError] = useState(false);
 
   // Use categoryImage if available, otherwise fall back to the default image
@@ -36,7 +34,7 @@ function TypeAccountCard({
 
   return (
     <Link
-      href={GameRoutes.accountType(gameName, gameId, type) as any}
+      href={GameRoutes.accountType(gameName, gameId, type)}
       className="group bg-black/40 backdrop-blur-sm rounded-xl overflow-hidden border border-white/20 hover:border-purple-400/50 hover:bg-black/60 shadow-lg hover:shadow-2xl hover:shadow-purple-500/20 hover:transform hover:scale-[1.02] transition-all duration-300 flex flex-col"
     >
       {/* Image */}
@@ -64,18 +62,18 @@ function TypeAccountCard({
 
         <div className="space-y-2 mb-4">
           <div className="flex justify-between items-center text-sm">
-            <span className="text-gray-300">{t("available")}</span>
+            <span className="text-gray-300">Sẵn có</span>
             <span className="text-green-400 font-semibold">{available}</span>
           </div>
           <div className="flex justify-between items-center text-sm">
-            <span className="text-gray-300">{t("sold")}</span>
+            <span className="text-gray-300">Đã bán</span>
             <span className="text-blue-300 font-semibold">{sold}</span>
           </div>
         </div>
 
         {/* Button - Always at bottom */}
         <div className="mt-auto w-full bg-purple-600/80 hover:bg-purple-600 text-white font-semibold py-2.5 rounded-lg transition-all duration-200 text-center shadow-lg shadow-purple-500/20">
-          {t("view_now")}
+          Xem ngay
         </div>
       </div>
     </Link>

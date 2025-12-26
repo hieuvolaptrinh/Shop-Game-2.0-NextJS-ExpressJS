@@ -1,7 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
-import { Link } from "@/i18n/navigation";
+import Link from "next/link";
 import type { GameAccountStatus } from "@/types/game-account.type";
 import { GameRoutes } from "@/routes";
 
@@ -26,119 +25,100 @@ function AccountCard({
   type,
   title,
   description,
-  originalPrice,
   actualPrice,
   status = "available",
   coverImage,
-  images = [],
 }: AccountCardProps) {
-  const t = useTranslations("AccountCard");
 
   const statusConfig: Record<
     GameAccountStatus,
     { label: string; color: string }
   > = {
-    available: { label: t("status.available"), color: "bg-green-600" },
-    sold: { label: t("status.sold"), color: "bg-red-600" },
-    reserved: { label: t("status.reserved"), color: "bg-yellow-600" },
+    available: { label: "Sẵn có", color: "bg-green-600" },
+    sold: { label: "Đã bán", color: "bg-red-600" },
+    reserved: { label: "Đã đặt", color: "bg-yellow-600" },
   };
 
-  const currentStatus = statusConfig[status] || statusConfig.available;
-  const hasDiscount = originalPrice && originalPrice > actualPrice;
-
   return (
-    <div className="group bg-[#1a1d29] rounded-xl overflow-hidden border border-[#2a2d3a] hover:border-blue-500/50 transition-all duration-300 flex flex-col">
-      {/* Image with Badges */}
-      <div className="relative w-full aspect-video overflow-hidden">
-        <img
-          src={coverImage}
-          alt={title}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-        />
+    <div className="group bg-card text-card-foreground rounded-xl overflow-hidden border border-border hover:border-primary/50 hover:shadow-2xl transition-all duration-500 flex flex-col relative">
+      {/* Image Container */}
+      <div className="p-1.5">
+        <div className="relative w-full aspect-[1.8/1] overflow-hidden rounded-lg">
+          <img
+            src={coverImage}
+            alt={title}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          />
 
-        {/* Status Badge */}
-        <div
-          className={`absolute top-3 left-3 ${currentStatus.color} text-white px-3 py-1 rounded-md text-xs font-bold`}
-        >
-          {currentStatus.label}
-        </div>
-
-        {/* ID Badge */}
-        <div className="absolute top-3 right-3 bg-black/70 text-white px-3 py-1 rounded-md text-xs font-bold">
-          #{id}
-        </div>
-
-        {/* Images count */}
-        {images.length > 0 && (
-          <div className="absolute bottom-2 right-2 bg-black/70 text-white px-2 py-1 rounded text-xs flex items-center gap-1">
-            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-              <path
-                fillRule="evenodd"
-                d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
-                clipRule="evenodd"
-              />
-            </svg>
-            {t("imagesCount", { count: images.length })}
+          {/* MS ID Badge - Top Right Ribbon Style */}
+          <div className="absolute top-0 right-0 z-10">
+            <div className="bg-[#ff0080] text-white px-4 py-1.5 font-extrabold text-sm md:text-base relative rounded-bl-xl shadow-lg flex items-center gap-1">
+              <span className="text-[10px] md:text-xs">MS:</span>
+              <span>{id}</span>
+              {/* Optional Ribbon fold effect */}
+              <div className="absolute top-full right-0 w-0 h-0 border-l-[6px] border-l-transparent border-t-[6px] border-t-[#c20061]"></div>
+            </div>
           </div>
-        )}
+        </div>
       </div>
 
       {/* Content */}
-      <div className="p-4 flex-1 flex flex-col">
-        {/* Title */}
-        <h3 className="text-white text-base font-semibold mb-2 line-clamp-2 leading-snug">
-          {title}
-        </h3>
+      <div className="px-4 pb-4 pt-2 flex-1 flex flex-col">
+          
+        {/* Status Badge - Dynamic Colors from Reference */}
+        {(() => {
+            const colors = [
+                { bg: "bg-[#00a8a8]", text: "text-white" }, // Teal
+                { bg: "bg-[#5c7af7]", text: "text-white" }, // Blue
+                { bg: "bg-[#ffb800]", text: "text-white" }, // Yellow
+                { bg: "bg-[#e11d48]", text: "text-white" }, // Red
+            ];
+            const color = colors[id % colors.length];
+            return (
+                <div className="mb-4">
+                     <div className={`inline-flex items-center gap-1.5 ${color.bg} ${color.text} px-3 py-1.5 rounded-lg font-extrabold text-[10px] shadow-sm group-hover:shadow-md transition-shadow uppercase`}>
+                        <svg viewBox="0 0 24 24" fill="none" className="w-3 h-3" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        Trắng thông tin
+                     </div>
+                </div>
+            )
+        })()}
 
-        {/* Description */}
-        {description && (
-          <p className="text-gray-400 text-sm mb-3 line-clamp-2">
-            {description}
-          </p>
-        )}
-
-        {/* Price Section */}
-        <div className="mb-4 mt-auto">
-          {hasDiscount && (
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-gray-500 text-sm line-through">
-                ${originalPrice?.toLocaleString("en-US")}
-              </span>
-              <span className="bg-red-600 text-white text-xs px-2 py-0.5 rounded font-bold">
-                -
-                {Math.round(
-                  ((originalPrice! - actualPrice) / originalPrice!) * 100
-                )}
-                %
-              </span>
+        <div className="flex items-center gap-3 mt-auto">
+            {/* Price section with dashed border */}
+            <div className="flex-1 flex items-center justify-center gap-2 bg-white dark:bg-gray-800 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-sm py-2 px-3 shadow-inner transition-colors duration-300">
+                <svg className="w-4 h-4 text-gray-800 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <rect x="2"   y="5" width="20" height="14" rx="2" strokeWidth="2" />
+                    <line x1="2" y1="10" x2="22" y2="10" strokeWidth="2" />
+                </svg>
+                <div className="flex flex-col">
+                    <span className="text-gray-900 dark:text-gray-100 font-extrabold text-xs leading-none">
+                        {actualPrice.toLocaleString("vi-VN")} <span className="text-xs underline">đ</span>
+                    </span>
+                </div>
             </div>
-          )}
-          <p className="text-blue-400 font-bold text-2xl">
-            ${actualPrice.toLocaleString("en-US")}
-          </p>
-        </div>
 
-        {/* Button */}
-        <Link
-          href={
-            GameRoutes.accountDetail(
-              gameName,
-              gameId,
-              type,
-              description || title,
-              id
-            ) as any
-          }
-          className={`w-full font-semibold py-3 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 text-sm ${
-            status === "available"
-              ? "bg-blue-600 hover:bg-blue-700 text-white"
-              : "bg-gray-600 cursor-not-allowed text-gray-300"
-          }`}
-        >
-          {status === "available"
-            ? t("buttons.viewDetails")
-            : t("buttons.notAvailable")}
-        </Link>
+            {/* View Details Button */}
+            <Link
+                href={
+                    GameRoutes.accountDetail(
+                    gameName,
+                    gameId,
+                    type,
+                    description || title,
+                    id
+                    )
+                }
+                className="flex-[1.2] h-[30px] bg-[#5c7af7] hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-500 text-white font-bold rounded-sm transition-all duration-300 flex items-center justify-center gap-2 text-[10px] shadow-md hover:shadow-lg active:scale-95"
+            >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                    <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                Chi Tiết
+            </Link>
+        </div>
       </div>
     </div>
   );

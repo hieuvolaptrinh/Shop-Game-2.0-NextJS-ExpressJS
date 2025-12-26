@@ -11,8 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { CheckCircle, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "@/i18n/navigation";
-import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import { DISCORD_CONTACT_LINK } from "@/utils/contact.info";
 
 interface OrderSuccessModalProps {
@@ -34,7 +33,6 @@ export default function OrderSuccessModal({
   orderData,
 }: OrderSuccessModalProps) {
   const router = useRouter();
-  const t = useTranslations("modals.orderSuccess");
 
   const handleClose = () => {
     onOpenChange(false);
@@ -54,41 +52,41 @@ export default function OrderSuccessModal({
           <div className="flex flex-col items-center text-center">
             <CheckCircle className="w-14 h-14 text-green-400 mb-3" />
             <DialogTitle className="text-2xl font-bold">
-              {t("title")}
+              Mua thành công!
             </DialogTitle>
             <DialogDescription className="text-gray-400 text-sm mt-2">
-              {t("description")}
+              Giao dịch của bạn đã được xử lý thành công. Vui lòng kiểm tra email để nhận thông tin tài khoản.
             </DialogDescription>
           </div>
         </DialogHeader>
 
         <div className="mt-6 bg-[#1a1d29] border border-[#2a2d3a] rounded-xl text-sm p-4 space-y-2">
           <div className="flex justify-between text-gray-300">
-            <span>{t("orderId")}</span>
+            <span>Mã đơn hàng</span>
             <span className="text-blue-400 font-medium">
               #{orderData.orderId}
             </span>
           </div>
           <div className="flex justify-between text-gray-300">
-            <span>{t("accountId")}</span>
+            <span>Mã tài khoản</span>
             <span>#{orderData.accountId}</span>
           </div>
           <div className="flex justify-between text-gray-300">
-            <span>{t("gameName")}</span>
+            <span>Tên game</span>
             <span>{orderData.gameName}</span>
           </div>
           <div className="flex justify-between text-gray-300">
-            <span>{t("price")}</span>
+            <span>Giá</span>
             <span className="text-blue-400 font-semibold">
               ${orderData.price.toLocaleString("en-US")}
             </span>
           </div>
           <div className="flex justify-between text-gray-300">
-            <span>{t("emailReceive")}</span>
+            <span>Email nhận hàng</span>
             <span>{orderData.email}</span>
           </div>
           <div className="flex justify-between text-gray-300">
-            <span>{t("purchaseDate")}</span>
+            <span>Ngày mua</span>
             <span>{new Date(orderData.createdAt).toLocaleString()}</span>
           </div>
         </div>
@@ -100,14 +98,14 @@ export default function OrderSuccessModal({
               className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6"
               onClick={handleClose}
             >
-              {t("closeButton")}
+              Đóng
             </Button>
           </DialogClose>
           <a
             href="/"
             className="bg-gray-700 hover:bg-gray-600 text-gray-200 font-semibold rounded-md px-6 py-2 text-sm transition-all"
           >
-            {t("homeButton")}
+            Trang chủ
           </a>
           <a
             href={DISCORD_CONTACT_LINK}
@@ -116,7 +114,7 @@ export default function OrderSuccessModal({
             className="bg-[#5865F2] hover:bg-[#4752C4] text-white font-semibold rounded-md px-6 py-2 text-sm transition-all flex items-center gap-2"
           >
             <MessageCircle className="w-4 h-4" />
-            {t("contactDiscordButton")}
+            Liên hệ Discord
           </a>
         </DialogFooter>
       </DialogContent>

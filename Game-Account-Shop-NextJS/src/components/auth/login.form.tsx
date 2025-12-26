@@ -3,25 +3,22 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { useTranslations } from "next-intl";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Link } from "@/i18n/navigation";
+import Link from "next/link";
 import { useAuth } from "@/contexts/auth.context";
 
 export function LoginForm() {
-  const t = useTranslations("auth.login");
-  const tv = useTranslations("auth.validation");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const { login } = useAuth();
 
   const loginSchema = z.object({
-    email: z.string().min(1, tv("required")).email(tv("email_invalid")),
-    password: z.string().min(6, tv("password_min")),
+    email: z.string().min(1, "Trường này là bắt buộc").email("Email không hợp lệ"),
+    password: z.string().min(6, "Mật khẩu phải có ít nhất 6 ký tự"),
   });
 
   type LoginFormData = z.infer<typeof loginSchema>;
@@ -39,62 +36,68 @@ export function LoginForm() {
       setError("");
       await login(data.email, data.password);
     } catch (err: any) {
-      setError(err.message || "Login failed");
+      setError(err.message || "Đăng nhập thất bại");
     }
   };
 
   return (
-    <div className="w-full max-w-md mx-auto">
-      <div className="bg-white p-8 sm:p-10 shadow-xl">
-        <div className="text-center mb-6">
-          <h2 className="text-3xl font-bold text-[#0f172a] mb-2">{t("title")}</h2>
-          <p className="text-gray-500 font-medium">{t("subtitle") || "Đăng nhập vào hệ thống"}</p>
+    <div className="w-full max-w-md mx-auto font-sans">
+      <div className="bg-card p-8 sm:p-10 shadow-xl border border-border rounded-xl transition-colors duration-300">
+        <div className="text-center mb-5">
+          <h2 className="text-3xl font-semibold text-foreground mb-3 tracking-tight">ĐĂNG NHẬP</h2>
+          <p className="text-muted-foreground font-medium">Chào mừng bạn đã quay trở lại!</p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           {/* Error Message */}
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
+            <div className="bg-destructive/10 border border-destructive/20 text-destructive px-4 py-3 rounded-lg text-sm font-medium animate-in fade-in slide-in-from-top-1 duration-200">
               {error}
             </div>
           )}
 
           {/* Email */}
-          <div>
-            <Label htmlFor="email" className="text-gray-700 font-bold">
-              {t("username_email_label") || "Tài Khoản"}
+          <div className="space-y-2">
+            <Label htmlFor="email" className="text-sm font-bold text-foreground/80 ml-1">
+              Email hoặc Tên đăng nhập
             </Label>
-            <div className="relative mt-2">
+            <div className="relative group">
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors group-focus-within:text-primary">
+                <Mail className="w-5 h-5" />
+              </div>
               <Input
                 id="email"
                 type="email"
-                placeholder={t("username_email_placeholder") || "Nhập Tên Tài Khoản"}
-                className="pl-4 h-11 bg-white border-gray-200 text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 rounded-lg shadow-sm"
+                placeholder="email@example.com"
+                className="pl-11 h-12 bg-muted/30 border-border hover:border-primary/50 text-foreground placeholder:text-muted-foreground/50 focus:border-primary focus:ring-primary/20 rounded-xl transition-all"
                 {...register("email")}
               />
             </div>
             {errors.email && (
-              <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+              <p className="text-destructive text-xs font-bold mt-1 ml-1">{errors.email.message}</p>
             )}
           </div>
 
           {/* Password */}
-          <div>
-            <Label htmlFor="password" className="text-gray-700 font-bold">
-              {t("password_label")}
+          <div className="space-y-2">
+            <Label htmlFor="password" className="text-sm font-bold text-foreground/80 ml-1">
+              Mật khẩu
             </Label>
-            <div className="relative mt-2">
+            <div className="relative group">
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors group-focus-within:text-primary">
+                <Lock className="w-5 h-5" />
+              </div>
               <Input
                 id="password"
                 type={showPassword ? "text" : "password"}
-                placeholder={t("password_placeholder") || "Nhập Mật Khẩu Của Bạn"}
-                className="pl-4 pr-10 h-11 bg-white border-gray-200 text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 rounded-lg shadow-sm"
+                placeholder="••••••••"
+                className="pl-11 pr-11 h-12 bg-muted/30 border-border hover:border-primary/50 text-foreground placeholder:text-muted-foreground/50 focus:border-primary focus:ring-primary/20 rounded-xl transition-all"
                 {...register("password")}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors p-1"
               >
                 {showPassword ? (
                   <EyeOff className="h-5 w-5" />
@@ -104,27 +107,27 @@ export function LoginForm() {
               </button>
             </div>
             {errors.password && (
-              <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+              <p className="text-destructive text-xs font-bold mt-1 ml-1">{errors.password.message}</p>
             )}
           </div>
 
           {/* Remember & Forgot Password */}
-          <div className="flex items-center justify-between text-sm">
-            <div className="flex items-center space-x-2">
+          <div className="flex items-center justify-between text-sm px-1">
+            <div className="flex items-center space-x-2 cursor-pointer group">
                 <input 
                     type="checkbox" 
                     id="remember" 
-                    className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" 
+                    className="h-4 w-4 rounded border-border bg-muted/50 text-primary focus:ring-primary/30 transition-all" 
                 />
-                <label htmlFor="remember" className="text-gray-600 font-medium">
-                    Ghi Nhớ Tài Khoản
+                <label htmlFor="remember" className="text-muted-foreground font-semibold group-hover:text-foreground transition-colors cursor-pointer">
+                    Ghi nhớ tôi
                 </label>
             </div>
             <button
               type="button"
-              className="text-black font-bold hover:underline"
+              className="text-primary font-bold hover:underline underline-offset-4"
             >
-              {t("forgot_password")}?
+              Quên mật khẩu?
             </button>
           </div>
 
@@ -132,37 +135,37 @@ export function LoginForm() {
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-[#0f172a] hover:bg-[#1e293b] text-white font-bold py-6 text-base rounded-lg shadow-lg shadow-blue-900/10 transition-all transform hover:scale-[1.01]"
+            className="w-full bg-foreground cursor-pointer text-primary-foreground font-bold py-7 text-lg rounded-lg transition-all active:scale-[0.98] disabled:opacity-50"
           >
-            {isSubmitting ? "..." : t("login_button")}
+            {isSubmitting ? "Đang xử lý..." : "ĐĂNG NHẬP NGAY"}
           </Button>
 
           {/* Divider */}
-           <div className="relative my-6">
+           <div className="relative my-3">
                 <div className="absolute inset-0 flex items-center">
-                    <span className="w-full border-t border-gray-200"></span>
+                    <span className="w-full border-t border-border"></span>
                 </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-white px-2 text-gray-500 font-medium">Or continue with</span>
+                <div className="relative flex justify-center text-[10px] uppercase font-bold tracking-widest">
+                    <span className="bg-card px-3 text-muted-foreground">Hoặc tiếp tục với</span>
                 </div>
             </div>
 
             {/* Social Icons (Mock) */}
              <div className="w-full">
-                 <button type="button" className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-all duration-200 bg-white group">
+                 <button type="button" className="w-full flex items-center justify-center gap-3 px-4 py-3.5 border border-border rounded-lg hover:bg-muted/50 transition-all duration-300 bg-card group shadow-sm hover:shadow-md">
                     <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                    <span className="text-gray-700 font-semibold text-sm">Tiếp tục với Google</span>
+                    <span className="text-foreground font-bold text-sm">Google Account</span>
                  </button>
              </div>
         </form>
 
-        <div className="mt-8 text-center text-sm font-bold text-gray-500 uppercase tracking-wide">
-          {t("no_account") || "BẠN CHƯA CÓ TÀI KHOẢN?"}{" "}
+        <div className="mt-10 text-center text-xs font-bold text-muted-foreground uppercase tracking-widest">
+          Bạn mới biết đến chúng tôi?{" "}
           <Link
             href="/register"
-            className="text-[#0f172a] hover:text-blue-600 hover:underline ml-1"
+            className="text-primary hover:underline underline-offset-4 ml-1"
           >
-            {t("create_account") || "ĐĂNG KÝ NGAY"}
+            Tạo tài khoản mới
           </Link>
         </div>
       </div>

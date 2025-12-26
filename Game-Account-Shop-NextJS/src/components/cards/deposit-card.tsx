@@ -2,7 +2,6 @@
 
 import { Clock, CheckCircle, XCircle, CreditCard, ZoomIn } from "lucide-react";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 interface DepositCardProps {
@@ -16,7 +15,6 @@ interface DepositCardProps {
 }
 
 export default function DepositCard({ deposit }: DepositCardProps) {
-  const t = useTranslations("histories");
   const [imageExpanded, setImageExpanded] = useState(false);
 
   const getStatusColor = (status: string) => {
@@ -43,6 +41,19 @@ export default function DepositCard({ deposit }: DepositCardProps) {
     }
   };
 
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case "approved":
+        return "Đã duyệt";
+      case "rejected":
+        return "Từ chối";
+      case "pending":
+        return "Đang chờ";
+      default:
+        return status;
+    }
+  };
+
   const formatDate = (date: string) => {
     return new Date(date).toLocaleString("vi-VN", {
       day: "2-digit",
@@ -66,7 +77,7 @@ export default function DepositCard({ deposit }: DepositCardProps) {
               >
                 <Image
                   src={deposit.imgUrl}
-                  alt="Deposit proof"
+                  alt="Ảnh biên lai"
                   fill
                   className="object-cover transition-transform duration-200 group-hover:scale-105"
                 />
@@ -102,7 +113,7 @@ export default function DepositCard({ deposit }: DepositCardProps) {
                 >
                   {getStatusIcon()}
                   <span className="capitalize hidden sm:inline">
-                    {t(`deposit_status.${deposit.status}`)}
+                    {getStatusLabel(deposit.status)}
                   </span>
                 </div>
               </div>
@@ -114,7 +125,7 @@ export default function DepositCard({ deposit }: DepositCardProps) {
                 </div>
                 {deposit.imgUrl && (
                   <div className="px-3 py-1.5 rounded-lg bg-[#0f1115] border border-[#2a2d3a] text-blue-400">
-                    {t("receipt_image")}
+                    Ảnh biên lai
                   </div>
                 )}
               </div>
@@ -140,7 +151,7 @@ export default function DepositCard({ deposit }: DepositCardProps) {
               <div className="overflow-auto max-h-[85vh]">
                 <Image
                   src={deposit.imgUrl}
-                  alt={t("receipt_image")}
+                  alt="Ảnh biên lai"
                   width={1200}
                   height={1200}
                   className="w-full h-auto"

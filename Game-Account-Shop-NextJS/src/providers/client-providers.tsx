@@ -1,6 +1,3 @@
-"use client";
-
-import { AuthProvider } from "./auth.provider";
 import { GameCategoryProvider } from "@/contexts/game-category.context";
 
 interface ClientProvidersProps {
@@ -9,8 +6,6 @@ interface ClientProvidersProps {
 
 export function ClientProviders({ children }: ClientProvidersProps) {
   return (
-    <AuthProvider>
-      <GameCategoryProvider>{children}</GameCategoryProvider>
-    </AuthProvider>
+    <GameCategoryProvider>{children}</GameCategoryProvider>
   );
 }

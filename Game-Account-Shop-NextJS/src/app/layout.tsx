@@ -1,52 +1,60 @@
 import { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import "@/app/globals.css";
+import { ClientProviders } from "@/providers/client-providers";
+import { AuthProvider } from "@/providers/auth.provider";
+import { ThemeProvider } from "@/providers/theme-provider";
+
+const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
   title: {
     default:
-      "Best Game Account Store - Buy Premium Gaming Accounts | League of Legends, Genshin Impact & More",
-    template: "%s | Best Game Account Store - Premium Gaming Accounts",
+      "Shop Tài Khoản Game Uy Tín - Cửa Hàng Tài Khoản Game Cao Cấp | Liên Quân, Genshin Impact & Nhiều Game Khác",
+    template: "%s | Shop Tài Khoản Game Uy Tín",
   },
   description:
-    "Buy premium game accounts for League of Legends, Genshin Impact, Arknights, Mobile Legends, Honkai Star Rail, Wuthering Waves & more. Instant delivery, secure transactions, lifetime support. Trusted by 50,000+ gamers worldwide.",
+    "Mua tài khoản game cao cấp: Liên Quân Mobile, Genshin Impact, Arknights, Mobile Legends, Honkai Star Rail, Wuthering Waves & nhiều game khác. Giao hàng ngay lập tức, giao dịch an toàn, hỗ trợ trọn đời. Được tin tưởng bởi hơn 50.000 game thủ.",
   keywords: [
-    "buy game accounts",
-    "gaming accounts for sale",
-    "League of Legends accounts",
-    "LoL account shop",
-    "best game account store",
-    "best game account",
-    "Genshin Impact accounts",
-    "Arknights accounts",
-    "Mobile Legends accounts",
-    "Honkai Star Rail accounts",
-    "Wuthering Waves accounts",
-    "premium gaming accounts",
-    "verified game accounts",
-    "instant delivery gaming accounts",
-    "secure game account store",
-    "buy LoL smurf accounts",
-    "cheap gaming accounts",
-    "leveled game accounts",
-    "rare skin accounts",
-    "game account marketplace",
-    "trusted game seller",
-    "gaming account shop",
-    "buy accounts online",
-    "game accounts worldwide",
-    "3D game accounts",
-    "MMO accounts for sale",
-    "MOBA accounts",
+    "mua tài khoản game",
+    "bán tài khoản game uy tín",
+    "acc liên quân mobile",
+    "shop acc liên minh",
+    "shop acc uy tín",
+    "mua acc game giá rẻ",
+    "tài khoản genshin impact",
+    "tài khoản arknights",
+    "tài khoản mobile legends",
+    "tài khoản honkai star rail",
+    "tài khoản wuthering waves",
+    "tài khoản game cao cấp",
+    "xác thực tài khoản game",
+    "giao hàng ngay lập tức",
+    "cửa hàng game an toàn",
+    "mua tài khoản lol",
+    "acc game giá rẻ",
+    "tài khoản game hiếm",
+    "thị trường tài khoản game",
+    "người bán game uy tín",
+    "shop tài khoản game",
+    "mua acc online",
+    "tài khoản game mmo",
+    "tài khoản game moba",
   ],
   authors: [
     {
-      name: "Best Game Account Store",
+      name: "Shop Tài Khoản Game Uy Tín",
       url:
         process.env.NEXT_PUBLIC_SITE_URL ||
         "https://game-account-shop-next-js.vercel.app",
     },
   ],
-  creator: "Best Game Account Store",
-  publisher: "Best Game Account Store",
+  creator: "Shop Tài Khoản Game Uy Tín",
+  publisher: "Shop Tài Khoản Game Uy Tín",
   formatDetection: {
     email: true,
     address: false,
@@ -58,34 +66,30 @@ export const metadata: Metadata = {
   ),
   alternates: {
     canonical: "/",
-    languages: {
-      "en-US": "/en",
-      "x-default": "/en",
-    },
   },
   openGraph: {
     type: "website",
-    locale: "en_US",
+    locale: "vi_VN",
     url: "/",
     title:
-      "Best Game Account Store - Buy Premium Gaming Accounts | League of Legends, Genshin Impact & More",
+      "Shop Tài Khoản Game Uy Tín - Cửa Hàng Tài Khoản Game Cao Cấp | Liên Quân, Genshin Impact & Nhiều Game Khác",
     description:
-      "Buy premium game accounts for League of Legends, Genshin Impact, Arknights, Mobile Legends, Honkai Star Rail & more. Instant delivery, secure transactions, trusted by 50,000+ gamers worldwide.",
-    siteName: "Best Game Account Store",
+      "Mua tài khoản game cao cấp: Liên Quân Mobile, Genshin Impact, Arknights, Mobile Legends, Honkai Star Rail & nhiều game khác. Giao hàng ngay lập tức, giao dịch an toàn, tin cậy tuyệt đối.",
+    siteName: "Shop Tài Khoản Game Uy Tín",
     images: [
       {
         url: "/logo.png",
         width: 1200,
         height: 630,
-        alt: "Best Game Account Store - Premium Gaming Accounts",
+        alt: "Shop Tài Khoản Game Uy Tín - Tài Khoản Game Cao Cấp",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Best Game Account Store - Premium Gaming Accounts",
+    title: "Shop Tài Khoản Game Uy Tín - Tài Khoản Game Cao Cấp",
     description:
-      "Buy premium game accounts: League of Legends, Genshin Impact, Arknights, Mobile Legends, Star Rail & more. Instant delivery, secure & trusted.",
+      "Mua tài khoản game cao cấp: Liên Quân, Genshin Impact, Arknights, Mobile Legends, Star Rail & nhiều game khác. Giao hàng ngay lập tức, an toàn & uy tín.",
     images: ["/logo.jpg"],
     creator: "@BestGameAccounts",
   },
@@ -101,16 +105,14 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: "your-google-verification-code", // Add after registering with Google Search Console
-    // yandex: "your-yandex-verification-code",
-    // bing: "your-bing-verification-code",
+    google: "your-google-verification-code", // Thêm sau khi đăng ký với Google Search Console
   },
   category: "gaming",
-  applicationName: "Best Game Account Store",
+  applicationName: "Shop Tài Khoản Game Uy Tín",
   referrer: "origin-when-cross-origin",
   appleWebApp: {
     capable: true,
-    title: "Best Game Account Store",
+    title: "Shop Tài Khoản Game Uy Tín",
     statusBarStyle: "black-translucent",
   },
 };
@@ -120,5 +122,22 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  return (
+    <html lang="vi" suppressHydrationWarning>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-background transition-colors duration-300`}
+      >
+         <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <ClientProviders>
+              <AuthProvider>{children}</AuthProvider>
+            </ClientProviders>
+          </ThemeProvider>
+      </body>
+    </html>
+  );
 }

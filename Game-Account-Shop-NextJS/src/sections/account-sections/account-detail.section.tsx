@@ -3,11 +3,23 @@
 import { useState } from "react";
 import { GameAccount } from "@/types/game-account.type";
 import BuyingGuideModal from "@/components/modals/buying-guide.modal";
-import { useTranslations } from "next-intl";
-import { Link, useRouter } from "@/i18n/navigation";
+import { useRouter } from "next/navigation";
 import { GameRoutes, ROUTES } from "@/routes";
 import { useAuth } from "@/contexts/auth.context";
 import { DISCORD_CONTACT_LINK } from "@/utils/contact.info";
+import { 
+  ShieldCheck, 
+  Info, 
+  ShoppingCart, 
+  MessageCircle, 
+  Image as ImageIcon,
+  CheckCircle2,
+  Clock,
+  ShieldAlert,
+  ChevronLeft,
+  ChevronRight
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface AccountDetailSectionProps {
   account: GameAccount;
@@ -18,28 +30,24 @@ function AccountDetailSection({
   account,
   gameName,
 }: AccountDetailSectionProps) {
-  const t = useTranslations("game.account_detail");
   const router = useRouter();
   const { isAuthenticated, user } = useAuth();
   const [selectedImage, setSelectedImage] = useState(0);
   const [showBuyingGuide, setShowBuyingGuide] = useState(false);
 
-  const originalPrice = Number(account.originalPrice || "0");
-  const currentPrice = Number(account.currentPrice || "0");
+  const originalPrice = Number(account.originalPrice || 0);
+  const currentPrice = Number(account.currentPrice || 0);
   const hasDiscount = originalPrice > 0 && originalPrice > currentPrice;
   const discountPercent = hasDiscount
     ? Math.round(((originalPrice - currentPrice) / originalPrice) * 100)
     : 0;
 
-  // Handle buy now click - check authentication first
   const handleBuyNow = () => {
     if (!isAuthenticated || !user) {
-      // Redirect to login with return URL
-      router.push(ROUTES.LOGIN as any);
+      router.push(ROUTES.LOGIN);
       return;
     }
 
-    // Navigate to payment page
     router.push(
       GameRoutes.accountPayment(
         gameName,
@@ -47,7 +55,7 @@ function AccountDetailSection({
         account.typeAccount?.toLowerCase() || "normal",
         account.description || `Account ${account.gameAccountId}`,
         account.gameAccountId
-      ) as any
+      )
     );
   };
 
@@ -56,44 +64,81 @@ function AccountDetailSection({
     allImages.unshift(account.mainImageUrl);
   }
 
+  const nextImage = () => setSelectedImage((prev) => (prev + 1) % allImages.length);
+  const prevImage = () => setSelectedImage((prev) => (prev - 1 + allImages.length) % allImages.length);
+
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      {/* Left Column - Images Gallery */}
-      <div className="lg:col-span-2">
-        <div className="bg-[#1a1d29] rounded-xl overflow-hidden border border-[#2a2d3a] p-4">
-          {/* Main Image */}
-          <div className="relative aspect-video rounded-lg overflow-hidden mb-4">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 transition-colors duration-300">
+      {/* Left Column - Images Gallery (8 cols) */}
+      <div className="lg:col-span-8 space-y-4">
+        <div className="bg-card rounded-lg overflow-hidden border border-border p-3 shadow-sm transition-all h-full">
+          {/* Main Image Viewer */}
+          <div className="relative aspect-video rounded-md overflow-hidden group bg-muted/20">
             <img
               src={
                 allImages[selectedImage] ||
                 account.mainImageUrl ||
                 "/images/placeholder.png"
               }
-              alt={account.description || "Account image"}
-              className="w-full h-full object-cover"
+              alt={account.title || "Account image"}
+              className="w-full h-full object-contain md:object-cover"
             />
-            {/* Status Badge on Image */}
+            
+            {/* Status Overlays */}
             {account.status === "sold" && (
-              <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-                <span className="bg-red-600 text-white px-6 py-3 rounded-lg text-2xl font-bold">
-                  {t("sold_badge")}
-                </span>
+              <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-20">
+                <div className="bg-destructive text-white px-6 py-3 rounded-lg text-xl font-bold uppercase tracking-widest shadow-lg">
+                  ĐÃ BÁN
+                </div>
               </div>
             )}
+
+            {/* Navigation Arrows */}
+            {allImages.length > 1 && (
+              <>
+                <button 
+                  onClick={prevImage}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                <button 
+                  onClick={nextImage}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+              </>
+            )}
+
+            {/* Image Counter Badge */}
+            <div className="absolute bottom-3 right-3 bg-black/50 text-white px-2.5 py-1 rounded-md text-[10px] font-semibold flex items-center gap-1.5 backdrop-blur-sm">
+              <ImageIcon className="w-3 h-3" />
+              {selectedImage + 1} / {allImages.length}
+            </div>
+
+            {/* MS Badge - Simplified */}
+            <div className="absolute top-0 right-0 z-10">
+              <div className="bg-primary text-primary-foreground px-4 py-1.5 font-bold text-sm rounded-bl-lg shadow-sm flex items-center gap-1">
+                <span className="text-[10px] opacity-80 uppercase">Mã số:</span>
+                <span>{account.gameAccountId}</span>
+              </div>
+            </div>
           </div>
 
-          {/* Thumbnail Gallery */}
+          {/* Thumbnail Strip */}
           {allImages.length > 1 && (
-            <div className="grid grid-cols-4 gap-2">
+            <div className="mt-3 flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
               {allImages.map((img, idx) => (
                 <button
                   key={idx}
                   onClick={() => setSelectedImage(idx)}
-                  className={`aspect-video rounded-lg overflow-hidden border-2 transition-all ${
+                  className={cn(
+                    "relative flex-shrink-0 w-20 aspect-video rounded-md overflow-hidden border-2 transition-all",
                     selectedImage === idx
-                      ? "border-blue-500"
-                      : "border-[#2a2d3a] hover:border-[#3a3d4a]"
-                  }`}
+                      ? "border-primary scale-105"
+                      : "border-border hover:border-primary/40"
+                  )}
                 >
                   <img
                     src={img}
@@ -105,209 +150,149 @@ function AccountDetailSection({
             </div>
           )}
 
-          {/* Description Section */}
-          <div className="mt-6 p-4 bg-[#16171f] rounded-lg">
-            <h3 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
-              <svg
-                className="w-5 h-5 text-blue-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              {t("description_title")}
-            </h3>
-            <div className="text-gray-300 text-sm leading-relaxed whitespace-pre-line">
-              {account.description}
+          {/* Detailed Description */}
+          <div className="mt-6">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="h-5 w-1 bg-primary rounded-full"></div>
+              <h3 className="text-lg font-semibold text-foreground">Thông Tin Chi Tiết</h3>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
+               <div className="bg-muted/30 border border-border rounded-lg p-3 flex items-center gap-3">
+                  <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary">
+                    <ShieldCheck className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wider leading-none mb-1">Bảo mật</p>
+                    <p className="text-xs font-semibold text-foreground">Trắng Thông Tin 100%</p>
+                  </div>
+               </div>
+               <div className="bg-muted/30 border border-border rounded-lg p-3 flex items-center gap-3">
+                  <div className="w-10 h-10 bg-green-500/10 rounded-lg flex items-center justify-center text-green-500">
+                    <CheckCircle2 className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wider leading-none mb-1">Trạng thái</p>
+                    <p className="text-xs font-semibold text-green-600 dark:text-green-400">Sẵn sàng giao dịch</p>
+                  </div>
+               </div>
+            </div>
+
+            <div className="prose prose-sm dark:prose-invert max-w-none bg-muted/10 p-4 rounded-lg border border-border/40">
+              <p className="whitespace-pre-line leading-relaxed text-sm text-foreground/80">
+                {account.description || "Không có mô tả chi tiết cho tài khoản này."}
+              </p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Right Column - Account Info & Purchase */}
-      <div className="lg:col-span-1">
-        <div className="bg-[#1a1d29] rounded-xl border border-[#2a2d3a] p-6 sticky top-4">
-          {/* Account ID */}
-          <div className="mb-4 pb-4 border-b border-[#2a2d3a]">
-            <p className="text-gray-400 text-xs mb-1">{t("account_code")}</p>
-            <p className="text-white font-bold text-lg">
-              #{account.gameAccountId}
-            </p>
+      {/* Right Column - Info & Action (4 cols) */}
+      <div className="lg:col-span-4 flex flex-col gap-4">
+        <div className="bg-card rounded-lg border border-border p-5 shadow-sm sticky top-24 transition-colors duration-300">
+          {/* Header Info */}
+          <div className="mb-5">
+            <div className="flex items-center gap-1.5 mb-2">
+               <span className="bg-muted text-muted-foreground text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider">
+                 {gameName}
+               </span>
+               <span className="bg-primary/10 text-primary text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider">
+                 #{account.gameAccountId}
+               </span>
+            </div>
+            <h1 className="text-lg font-bold text-foreground leading-snug">
+              {account.title || `${gameName} Premium Account`}
+            </h1>
           </div>
 
-          {/* Title */}
-          <h1 className="text-xl font-bold text-white mb-4 leading-snug">
-            {account.title || account.description || "Game Account"}
-          </h1>
-
-          {/* Game Info */}
-          <div className="mb-4 p-3 bg-[#16171f] rounded-lg">
-            <p className="text-gray-400 text-xs mb-1">{t("game")}</p>
-            <p className="text-blue-400 font-semibold">{gameName}</p>
-          </div>
-
-          {/* Price Section */}
-          <div className="mb-6 p-4 bg-gradient-to-br from-blue-600/20 to-purple-600/20 rounded-lg border border-blue-500/30">
-            <p className="text-gray-300 text-sm mb-2">{t("product_price")}</p>
-
-            {hasDiscount && (
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-gray-400 text-lg line-through">
-                  ${Number(account.originalPrice).toLocaleString("en-US")}
-                </span>
-                <span className="bg-red-600 text-white text-xs px-2 py-1 rounded font-bold">
-                  -{discountPercent}%
-                </span>
+          {/* Pricing Card */}
+          <div className="mb-6 p-4 bg-muted/20 rounded-lg border border-border transition-colors relative overflow-hidden">
+            <div className="flex flex-col gap-1">
+              <p className="text-muted-foreground text-[10px] font-semibold uppercase tracking-widest">Giá bán ưu đãi</p>
+              <div className="flex items-baseline gap-2">
+                 <span className="text-2xl font-bold text-foreground">
+                    {currentPrice.toLocaleString("vi-VN")}
+                    <span className="text-base ml-0.5">₫</span>
+                 </span>
+                 {hasDiscount && (
+                   <span className="text-muted-foreground/50 line-through text-sm font-medium">
+                     {originalPrice.toLocaleString("vi-VN")}₫
+                   </span>
+                 )}
               </div>
-            )}
-
-            <p className="text-blue-400 font-bold text-3xl">
-              ${Number(account.currentPrice).toLocaleString("en-US")}
-            </p>
-          </div>
-
-          {/* Status */}
-          <div className="mb-6">
-            <div className="flex items-center justify-between p-3 bg-[#16171f] rounded-lg">
-              <span className="text-gray-400 text-sm">{t("status")}</span>
-              <span
-                className={`font-semibold text-sm ${
-                  account.status === "available"
-                    ? "text-green-400"
-                    : "text-red-400"
-                }`}
-              >
-                {account.status === "available" ? t("in_stock") : t("sold_out")}
-              </span>
+              {hasDiscount && (
+                <div className="mt-1.5 inline-flex items-center gap-1.5 text-destructive font-semibold text-xs">
+                   <div className="bg-destructive text-white px-1.5 py-0.5 rounded text-[9px]">-{discountPercent}%</div>
+                   <span className="text-[10px] uppercase">Tiết kiệm { (originalPrice - currentPrice).toLocaleString("vi-VN") }₫</span>
+                </div>
+              )}
             </div>
           </div>
 
           {/* Action Buttons */}
-          {account.status === "available" ? (
-            <div className="space-y-2 sm:space-y-3">
-              <button
-                onClick={handleBuyNow}
-                className="w-full bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-bold py-3 sm:py-3.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 text-sm sm:text-base"
-              >
-                <svg
-                  className="w-4 h-4 sm:w-5 sm:h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+          <div className="space-y-2">
+            {account.status === "available" ? (
+              <>
+                <button
+                  onClick={handleBuyNow}
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-2.5 rounded-md transition-all active:scale-[0.98] flex items-center justify-center gap-2 text-sm shadow-sm"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                  />
-                </svg>
-                <span>{t("buy_now")}</span>
-              </button>
+                  <ShoppingCart className="w-4 h-4" />
+                  <span>THANH TOÁN NGAY</span>
+                </button>
 
-              <button
-                onClick={() => setShowBuyingGuide(true)}
-                className="w-full bg-purple-600 hover:bg-purple-700 active:scale-95 text-white font-bold py-3 sm:py-3.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 text-sm sm:text-base"
-              >
-                <svg
-                  className="w-4 h-4 sm:w-5 sm:h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+                <button
+                  onClick={() => setShowBuyingGuide(true)}
+                  className="w-full bg-card hover:bg-muted border border-border text-foreground font-semibold py-2.5 rounded-md transition-all flex items-center justify-center gap-2 text-sm"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-                <span>{t("buying_guide")}</span>
-              </button>
+                  <Info className="w-4 h-4 text-primary" />
+                  <span>Hướng dẫn mua hàng</span>
+                </button>
 
-              <button
-                className="w-full bg-green-600 hover:bg-green-700 active:scale-95 text-white font-bold py-3 sm:py-3.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 text-sm sm:text-base"
-                onClick={() => window.open(DISCORD_CONTACT_LINK, "_blank")}
-              >
-                <svg
-                  className="w-4 h-4 sm:w-5 sm:h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                  />
-                </svg>
-                <span>{t("contact_advisor")}</span>
-              </button>
-            </div>
-          ) : (
-            <div className="bg-red-600/20 border border-red-600/30 rounded-lg p-4 text-center">
-              <p className="text-red-400 font-semibold">{t("sold_message")}</p>
-            </div>
-          )}
+                <div className="grid grid-cols-2 gap-2">
+                   <button 
+                    className="bg-blue-600/10 hover:bg-blue-600/15 text-blue-600 dark:text-blue-400 font-semibold py-2 rounded-md transition-all flex items-center justify-center gap-1.5 border border-blue-600/20 text-xs"
+                    onClick={() => window.open(DISCORD_CONTACT_LINK, "_blank")}
+                   >
+                     <MessageCircle className="w-3.5 h-3.5" />
+                     Messenger
+                   </button>
+                   <button 
+                    className="bg-green-600/10 hover:bg-green-600/15 text-green-600 dark:text-green-400 font-semibold py-2 rounded-md transition-all flex items-center justify-center gap-1.5 border border-green-600/20 text-xs"
+                    onClick={() => window.open("https://zalo.me", "_blank")}
+                   >
+                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Icon_of_Zalo.svg/1200px-Icon_of_Zalo.svg.png" className="w-3.5 h-3.5" alt="Zalo" />
+                     Zalo Hỗ Trợ
+                   </button>
+                </div>
+              </>
+            ) : (
+                <div className="p-4 bg-destructive/5 border border-destructive/10 rounded-md text-center">
+                    <ShieldAlert className="w-6 h-6 text-destructive mx-auto mb-2" />
+                    <p className="text-destructive font-bold text-xs uppercase">Tài khoản này đã bán</p>
+                    <p className="text-[10px] text-muted-foreground mt-0.5">Vui lòng quay lại tìm tài khoản khác</p>
+                </div>
+            )}
+          </div>
 
-          {/* Buying Guide Modal */}
-          <BuyingGuideModal
-            open={showBuyingGuide}
-            onOpenChange={setShowBuyingGuide}
-          />
-
-          {/* Additional Info */}
-          <div className="mt-6 pt-6 border-t border-[#2a2d3a] space-y-3">
-            <div className="flex items-start gap-2 text-xs text-gray-400">
-              <svg
-                className="w-4 h-4 mt-0.5 flex-shrink-0"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <span>{t("warranty_info")}</span>
-            </div>
-
-            <div className="flex items-start gap-2 text-xs text-gray-400">
-              <svg
-                className="w-4 h-4 mt-0.5 flex-shrink-0"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <span>{t("email_support")}</span>
-            </div>
-
-            <div className="flex items-start gap-2 text-xs text-gray-400">
-              <svg
-                className="w-4 h-4 mt-0.5 flex-shrink-0"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" />
-              </svg>
-              <span>{t("check_before_pay")}</span>
-            </div>
+          {/* Quick Commitments */}
+          <div className="mt-6 pt-5 border-t border-border space-y-3">
+             <div className="flex items-center gap-2.5 text-muted-foreground">
+                <ShieldCheck className="w-4 h-4 text-primary" />
+                <span className="text-[10px] font-semibold uppercase tracking-wide">Bảo hành 1:1 trọn đời</span>
+             </div>
+             <div className="flex items-center gap-2.5 text-muted-foreground">
+                <Clock className="w-4 h-4 text-primary" />
+                <span className="text-[10px] font-semibold uppercase tracking-wide">Giao hàng tự động 24/7</span>
+             </div>
           </div>
         </div>
       </div>
+
+      <BuyingGuideModal
+        open={showBuyingGuide}
+        onOpenChange={setShowBuyingGuide}
+      />
     </div>
   );
 }

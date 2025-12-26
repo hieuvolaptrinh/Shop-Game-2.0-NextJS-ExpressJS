@@ -5,7 +5,6 @@ import AccountCard from "@/components/cards/account.card";
 import FilterDropdown from "@/components/dropdown/filter-dropdown";
 import type { GameAccount } from "@/types/game-account.type";
 import { getFilterOptions, applyFilters } from "@/utils/accounts.util";
-import { useTranslations } from "next-intl";
 
 interface ListAccountSectionProps {
   accounts: GameAccount[];
@@ -20,10 +19,8 @@ export default function ListAccountSection({
   gameId,
   type,
 }: ListAccountSectionProps) {
-  const t = useTranslations("game.filters");
-
   const { sortOptions, priceFilterOptions, statusFilterOptions } =
-    getFilterOptions(t);
+    getFilterOptions();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("default");
@@ -59,29 +56,29 @@ export default function ListAccountSection({
   return (
     <>
       {/* Filter Bar */}
-      <div className="mb-8 bg-[#1a1d29] border border-[#2a2d3a] rounded-xl p-5">
+      <div className="mb-8 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-xl p-5 transition-colors duration-300">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
           {/* Search Input */}
           <div className="flex flex-col">
             <label className="text-gray-400 text-xs mb-2 font-medium">
-              {t("search_label")}
+              Tìm kiếm
             </label>
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder={t("search_placeholder")}
-              className="w-full bg-[#0f1115] text-white text-sm border border-[#2a2d3a] hover:border-[#3a3d4a] focus:border-blue-500 rounded-lg px-4 h-[42px] focus:outline-none transition-all"
+              placeholder="Nhập từ khóa tìm kiếm..."
+              className="w-full bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-200 text-sm border border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600 focus:border-blue-500 rounded-lg px-4 h-[42px] focus:outline-none transition-all"
             />
           </div>
 
           {/* Sort */}
           <div className="flex flex-col">
             <label className="text-gray-400 text-xs mb-2 font-medium">
-              {t("sort_label")}
+              Sắp xếp theo
             </label>
             <FilterDropdown
-              label={t("sort_placeholder")}
+              label="Chọn cách sắp xếp"
               options={sortOptions}
               value={sortBy}
               onChange={setSortBy}
@@ -91,10 +88,10 @@ export default function ListAccountSection({
           {/* Price */}
           <div className="flex flex-col">
             <label className="text-gray-400 text-xs mb-2 font-medium">
-              {t("price_label")}
+              Mức giá
             </label>
             <FilterDropdown
-              label={t("price_placeholder")}
+              label="Chọn mức giá"
               options={priceFilterOptions}
               value={priceFilter}
               onChange={setPriceFilter}
@@ -104,10 +101,10 @@ export default function ListAccountSection({
           {/* Status */}
           <div className="flex flex-col">
             <label className="text-gray-400 text-xs mb-2 font-medium">
-              {t("status_label")}
+              Trạng thái
             </label>
             <FilterDropdown
-              label={t("status_placeholder")}
+              label="Chọn trạng thái"
               options={statusFilterOptions}
               value={statusFilter}
               onChange={setStatusFilter}
@@ -116,21 +113,21 @@ export default function ListAccountSection({
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between mt-4 pt-4 border-t border-[#2a2d3a]">
+        <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-300 dark:border-gray-800">
           <div className="text-gray-400 text-sm">
-            {t("showing")}{" "}
+            Đang hiển thị{" "}
             <span className="text-blue-400 font-semibold">
               {filteredAccounts.length}
             </span>{" "}
-            {t("accounts_in_stock")}
+            tài khoản sẵn có
           </div>
 
           {hasActiveFilters && (
             <button
               onClick={handleResetFilters}
-              className="bg-[#2a2d3a] hover:bg-[#3a3d4a] text-gray-300 font-semibold py-2 px-4 rounded-lg transition-all flex items-center gap-2 text-sm"
+              className="bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 font-semibold py-2 px-4 rounded-lg transition-all flex items-center gap-2 text-sm"
             >
-              ✖ {t("clear_filters")}
+              ✖ Xóa bộ lọc
             </button>
           )}
         </div>
@@ -157,16 +154,16 @@ export default function ListAccountSection({
           ))}
         </div>
       ) : (
-        <div className="text-center py-20 bg-[#1a1d29] border border-[#2a2d3a] rounded-xl">
+        <div className="text-center py-20 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-xl transition-colors duration-300">
           <div className="text-6xl mb-4">🔍</div>
-          <p className="text-gray-400 text-lg mb-2">{t("no_results_title")}</p>
-          <p className="text-gray-500 text-sm mb-4">{t("no_results_desc")}</p>
+          <p className="text-gray-400 text-lg mb-2">Không tìm thấy kết quả</p>
+          <p className="text-gray-500 text-sm mb-4">Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm của bạn</p>
           {hasActiveFilters && (
             <button
               onClick={handleResetFilters}
               className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-all"
             >
-              {t("clear_all_filters")}
+              Xóa tất cả bộ lọc
             </button>
           )}
         </div>

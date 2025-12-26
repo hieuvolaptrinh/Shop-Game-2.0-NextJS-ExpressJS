@@ -1,106 +1,102 @@
 "use client";
 
-import Image from "next/image";
-import { useTranslations } from "next-intl";
 import { Mail, MessageCircle } from "lucide-react";
 
 interface PolicyDetail {
-  key: string;
+  text: string;
 }
 
 interface Policy {
   id: number;
-  titleKey: string;
-  descriptionKey: string;
+  title: string;
+  description: string;
   icon: string;
-  detailKeys: PolicyDetail[];
+  details: PolicyDetail[];
   gradient: string;
 }
 
 const policiesData: Policy[] = [
   {
     id: 1,
-    titleKey: "privacy.title",
-    descriptionKey: "privacy.description",
+    title: "Chính Sách Bảo Mật Thông Tin",
+    description: "Chúng tôi cam kết bảo vệ thông tin cá nhân của khách hàng theo các tiêu chuẩn bảo mật cao nhất.",
     icon: "🔒",
-    detailKeys: [
-      { key: "privacy.detail_1" },
-      { key: "privacy.detail_2" },
-      { key: "privacy.detail_3" },
-      { key: "privacy.detail_4" },
+    details: [
+      { text: "Mọi thông tin cá nhân được mã hóa và lưu trữ an toàn" },
+      { text: "Không chia sẻ dữ liệu cho bên thứ ba khi chưa có sự đồng ý" },
+      { text: "Tuân thủ nghiêm ngặt các quy định về bảo vệ dữ liệu" },
+      { text: "Hệ thống bảo mật được cập nhật thường xuyên" },
     ],
     gradient: "from-blue-500/10 to-cyan-500/10",
   },
   {
     id: 2,
-    titleKey: "warranty.title",
-    descriptionKey: "warranty.description",
+    title: "Chính Sách Bảo Hành",
+    description: "Đảm bảo quyền lợi của khách hàng với chính sách bảo hành linh hoạt và rõ ràng.",
     icon: "🛡️",
-    detailKeys: [
-      { key: "warranty.detail_1" },
-      { key: "warranty.detail_2" },
-      { key: "warranty.detail_3" },
-      { key: "warranty.detail_4" },
+    details: [
+      { text: "Bảo hành 7-30 ngày tùy theo gói sản phẩm đã chọn" },
+      { text: "Hỗ trợ đổi tài khoản mới hoàn toàn miễn phí if có lỗi" },
+      { text: "Xử lý khiếu nại trong vòng 24 giờ làm việc" },
+      { text: "Đội ngũ kỹ thuật hỗ trợ 24/7 trong thời gian bảo hành" },
     ],
     gradient: "from-emerald-500/10 to-teal-500/10",
   },
   {
     id: 3,
-    titleKey: "payment.title",
-    descriptionKey: "payment.description",
+    title: "Chính Sách Thanh Toán",
+    description: "Cung cấp đa dạng phương thức thanh toán an toàn, nhanh chóng và tiện lợi.",
     icon: "💳",
-    detailKeys: [
-      { key: "payment.detail_1" },
-      { key: "payment.detail_2" },
-      { key: "payment.detail_3" },
-      { key: "payment.detail_4" },
+    details: [
+      { text: "Thanh toán qua các cổng thanh toán - An toàn và nhanh chóng" },
+      { text: "Chuyển khoản TRC20-USDT - Phí thấp, xử lý nhanh" },
+      { text: "Xác nhận giao dịch tự động trong 1-5 phút" },
+      { text: "Hỗ trợ thanh toán 24/7 mọi thời điểm" },
     ],
     gradient: "from-purple-500/10 to-pink-500/10",
   },
   {
     id: 4,
-    titleKey: "refund.title",
-    descriptionKey: "refund.description",
+    title: "Chính Sách Đổi Trả & Hoàn Tiền",
+    description: "Chính sách đổi trả linh hoạt, bảo vệ quyền lợi tối đa cho người tiêu dùng.",
     icon: "🔄",
-    detailKeys: [
-      { key: "refund.detail_1" },
-      { key: "refund.detail_2" },
-      { key: "refund.detail_3" },
-      { key: "refund.detail_4" },
+    details: [
+      { text: "Đổi trả trong 24 giờ nếu tài khoản không đúng mô tả" },
+      { text: "Hoàn tiền 100% nếu có vấn đề về bảo mật ban đầu" },
+      { text: "Thời gian xử lý hoàn tiền: 1-3 ngày làm việc" },
+      { text: "Kiểm tra kỹ thông tin trước khi hoàn tất giao dịch" },
     ],
     gradient: "from-orange-500/10 to-red-500/10",
   },
   {
     id: 5,
-    titleKey: "delivery.title",
-    descriptionKey: "delivery.description",
+    title: "Chính Sách Giao Hàng",
+    description: "Giao tài khoản nhanh chóng ngay sau khi thanh toán thành công.",
     icon: "📦",
-    detailKeys: [
-      { key: "delivery.detail_1" },
-      { key: "delivery.detail_2" },
-      { key: "delivery.detail_3" },
-      { key: "delivery.detail_4" },
+    details: [
+      { text: "Giao thông tin tài khoản qua Email hoặc Discord ngay lập tức" },
+      { text: "Hướng dẫn chi tiết cách đổi mật khẩu và bảo mật tài khoản" },
+      { text: "Kiểm tra và xác nhận thông tin trước khi giao hàng" },
+      { text: "Hỗ trợ đăng nhập lần đầu nếu khách hàng gặp khó khăn" },
     ],
     gradient: "from-indigo-500/10 to-blue-500/10",
   },
   {
     id: 6,
-    titleKey: "terms.title",
-    descriptionKey: "terms.description",
+    title: "Điều Khoản Sử Dụng",
+    description: "Các quy định và điều khoản khi sử dụng dịch vụ mua bán tài khoản game.",
     icon: "📜",
-    detailKeys: [
-      { key: "terms.detail_1" },
-      { key: "terms.detail_2" },
-      { key: "terms.detail_3" },
-      { key: "terms.detail_4" },
+    details: [
+      { text: "Khách hàng phải từ 16 tuổi trở lên để thực hiện giao dịch" },
+      { text: "Tuân thủ các điều khoản của nhà phát hành game" },
+      { text: "Không sử dụng tài khoản cho mục đích vi phạm pháp luật" },
+      { text: "Chúng tôi không chịu trách nhiệm nếu tài khoản bị khóa do vi phạm" },
     ],
     gradient: "from-slate-500/10 to-gray-500/10",
   },
 ];
 
 function PolicesSection() {
-  const t = useTranslations("policies");
-
   return (
     <div className="min-h-screen relative bg-gray-50">
       {/* Content */}
@@ -108,11 +104,11 @@ function PolicesSection() {
         {/* Header */}
         <div className="text-center mb-12 md:mb-16">
           <h1 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4 tracking-tight">
-            {t("page_title")}
+            Chính Sách & Điều Khoản
           </h1>
           <div className="h-1 w-20 bg-gradient-to-r from-blue-500 to-cyan-500 mx-auto rounded-full mb-4" />
           <p className="text-gray-600 text-sm md:text-base max-w-2xl mx-auto">
-            {t("page_subtitle")}
+            Vui lòng đọc kỹ các chính sách để hiểu rõ quyền lợi của bạn
           </p>
         </div>
 
@@ -132,15 +128,15 @@ function PolicesSection() {
                 {/* Content */}
                 <div className="flex-1 w-full">
                   <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
-                    {t(policy.titleKey)}
+                    {policy.title}
                   </h3>
                   <p className="text-gray-600 mb-5 leading-relaxed text-sm md:text-base">
-                    {t(policy.descriptionKey)}
+                    {policy.description}
                   </p>
 
                   {/* Details List */}
                   <ul className="space-y-3">
-                    {policy.detailKeys.map((detail, index) => (
+                    {policy.details.map((detail, index) => (
                       <li
                         key={index}
                         className="flex items-start gap-3 text-gray-600 text-sm md:text-base"
@@ -148,7 +144,7 @@ function PolicesSection() {
                         <span className="text-blue-500 mt-1 flex-shrink-0 font-bold">
                           ✓
                         </span>
-                        <span className="leading-relaxed">{t(detail.key)}</span>
+                        <span className="leading-relaxed">{detail.text}</span>
                       </li>
                     ))}
                   </ul>
@@ -162,7 +158,7 @@ function PolicesSection() {
         <div className="max-w-6xl mx-auto">
           <div className="bg-white border border-gray-200 shadow-lg rounded-2xl p-6 md:p-8">
             <h3 className="text-xl md:text-2xl font-bold text-gray-900 text-center mb-6">
-              {t("contact_title")}
+              Liên Hệ Hỗ Trợ 24/7
             </h3>
 
             <div className="grid md:grid-cols-2 gap-4 md:gap-6">
@@ -176,7 +172,7 @@ function PolicesSection() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-gray-500 text-xs md:text-sm mb-1">
-                    {t("contact_email")}
+                    Email
                   </p>
                   <p className="text-gray-900 font-semibold text-sm md:text-base truncate">
                     proofbga@gmail.com
@@ -196,7 +192,7 @@ function PolicesSection() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-gray-500 text-xs md:text-sm mb-1">
-                    {t("contact_discord")}
+                    Discord
                   </p>
                   <p className="text-gray-900 font-semibold text-sm md:text-base truncate">
                     https://discord.gg/8DrYCxTV7u

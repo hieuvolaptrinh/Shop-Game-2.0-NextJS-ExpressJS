@@ -5,26 +5,26 @@ export interface FilterOption {
   value: string;
 }
 
-export function getFilterOptions(t: (key: string) => string) {
+export function getFilterOptions() {
   return {
     sortOptions: [
-      { label: t("sort_default"), value: "default" },
-      { label: t("sort_price_asc"), value: "price-asc" },
-      { label: t("sort_price_desc"), value: "price-desc" },
-      { label: t("sort_newest"), value: "newest" },
+      { label: "Mặc định", value: "default" },
+      { label: "Giá thấp đến cao", value: "price-asc" },
+      { label: "Giá cao đến thấp", value: "price-desc" },
+      { label: "Mới nhất", value: "newest" },
     ],
     priceFilterOptions: [
-      { label: t("price_all"), value: "all" },
-      { label: t("price_under10"), value: "0-10" },
-      { label: t("price_10to20"), value: "10-20" },
-      { label: t("price_20to50"), value: "20-50" },
-      { label: t("price_50to100"), value: "50-100" },
-      { label: t("price_over100"), value: "100-999999" },
+      { label: "Tất cả mức giá", value: "all" },
+      { label: "Dưới $10", value: "0-10" },
+      { label: "$10 - $20", value: "10-20" },
+      { label: "$20 - $50", value: "20-50" },
+      { label: "$50 - $100", value: "50-100" },
+      { label: "Trên $100", value: "100-999999" },
     ],
     statusFilterOptions: [
-      { label: t("status_all"), value: "all" },
-      { label: t("status_available"), value: "available" },
-      { label: t("status_reserved"), value: "reserved" },
+      { label: "Tất cả trạng thái", value: "all" },
+      { label: "Sẵn có", value: "available" },
+      { label: "Đã đặt", value: "reserved" },
     ],
   };
 }

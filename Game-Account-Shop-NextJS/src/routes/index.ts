@@ -32,16 +32,16 @@ export const GameRoutes = {
 
   /**
    * Trang danh sách account theo type
-   * Format: /{game-name-id}/{type}
-   * Ví dụ: /wuthering-waves-4/vip
+   * Format: /{type}-{game-name-id} (1 level nesting)
+   * Ví dụ: /vip-wuthering-waves-4
    */
   accountType: (gameName: string, gameId: number | string, type: string) =>
-    `/${createSlugWithId(gameName, gameId)}/${createSlug(type)}`,
+    `/${createSlug(type)}-${createSlugWithId(gameName, gameId)}`,
 
   /**
    * Trang chi tiết account
-   * Format: /{game-name-id}/{type}/{account-title-id.html}
-   * Ví dụ: /wuthering-waves-4/vip/premium-account-123.html
+   * Format: /{type}-{game-name-id}/{account-title-id.html}
+   * Ví dụ: /vip-wuthering-waves-4/premium-account-123.html
    */
   accountDetail: (
     gameName: string,
@@ -50,14 +50,14 @@ export const GameRoutes = {
     accountTitle: string,
     accountId: number | string
   ) =>
-    `/${createSlugWithId(gameName, gameId)}/${createSlug(
-      type
-    )}/${createSlugHtml(accountTitle, accountId)}`,
+    `/${createSlug(type)}-${createSlugWithId(gameName, gameId)}/${createSlugHtml(
+      accountTitle,
+      accountId
+    )}`,
 
   /**
    * Trang thanh toán
-   * Format: /{game-name-id}/{type}/{account-title-id.html}/payment
-   * Ví dụ: /wuthering-waves-4/vip/premium-account-123.html/payment
+   * Format: /{type}-{game-name-id}/{account-title-id.html}/payment
    */
   accountPayment: (
     gameName: string,
@@ -66,15 +66,16 @@ export const GameRoutes = {
     accountTitle: string,
     accountId: number | string
   ) =>
-    `/${createSlugWithId(gameName, gameId)}/${createSlug(
-      type
+    `/${createSlug(type)}-${createSlugWithId(
+      gameName,
+      gameId
     )}/${createSlugHtml(accountTitle, accountId)}/payment`,
 
   /**
    * Alias cho accountType (backward compatibility)
    */
   accountList: (gameName: string, gameId: number | string, type: string) =>
-    `/${createSlugWithId(gameName, gameId)}/${createSlug(type)}`,
+    `/${createSlug(type)}-${createSlugWithId(gameName, gameId)}`,
 } as const;
 
 export enum GameSlug {

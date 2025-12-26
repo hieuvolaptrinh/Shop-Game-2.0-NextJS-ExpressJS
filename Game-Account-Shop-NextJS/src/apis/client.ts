@@ -29,14 +29,14 @@ async function handleResponse<T>(res: Response): Promise<T> {
     ? await res.json()
     : await res.text();
 
-  if (!res.ok) {
-    const err = new Error(
-      (body as any)?.message || res.statusText || "Request failed"
-    );
-    (err as any).status = res.status;
-    (err as any).body = body;
-    throw err;
-  }
+  // if (!res.ok) {
+  //   const err = new Error(
+  //     (body as any)?.message || res.statusText || "Request failed"
+  //   );
+  //   (err as any).status = res.status;
+  //   (err as any).body = body;
+  //   throw err;
+  // }
   return body as T;
 }
 

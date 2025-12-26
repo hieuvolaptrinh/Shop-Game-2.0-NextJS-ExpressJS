@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
 import {
   CreditCard,
   Mail,
@@ -14,7 +13,7 @@ import {
   ArrowLeft,
   Loader2,
 } from "lucide-react";
-import { useRouter } from "@/i18n/navigation";
+import { useRouter } from "next/navigation";
 import { ROUTES } from "@/routes";
 import { useAuth } from "@/contexts/auth.context";
 import { GameAccount } from "@/types/game-account.type";
@@ -36,7 +35,6 @@ export default function PaymentSection({
   account,
   gameName,
 }: PaymentSectionProps) {
-  const t = useTranslations("payment");
   const router = useRouter();
   const { isAuthenticated, user, isLoading, refetchUser } = useAuth();
 
@@ -55,7 +53,7 @@ export default function PaymentSection({
 
   //  Redirect nếu chưa đăng nhập
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) router.push(ROUTES.LOGIN as any);
+    if (!isLoading && !isAuthenticated) router.push(ROUTES.LOGIN);
   }, [isLoading, isAuthenticated, router]);
 
   useEffect(() => {
@@ -93,7 +91,7 @@ export default function PaymentSection({
       });
 
       if (paymentRes.status === "error") {
-        throw new Error(paymentRes.message || t("payment_failed"));
+        throw new Error(paymentRes.message || "Thanh toán thất bại");
       }
 
       const orderRes = await purchaseGameAccount({
@@ -155,12 +153,12 @@ export default function PaymentSection({
           className="flex items-center gap-2 text-gray-400 hover:text-white mb-6 transition"
         >
           <ArrowLeft className="w-5 h-5" />
-          <span className="text-sm">{t("back_button")}</span>
+          <span className="text-sm">Quay lại</span>
         </button>
 
         <h1 className="text-3xl font-bold text-white flex items-center gap-2 mb-8">
           <CreditCard className="w-7 h-7 text-blue-400" />
-          {t("title")}
+          Xác Nhận Thanh Toán
         </h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -170,7 +168,7 @@ export default function PaymentSection({
             <div className="bg-[#1a1d29] border border-[#2a2d3a] p-6 rounded-xl">
               <div className="flex items-center justify-between mb-2">
                 <h2 className="text-white font-semibold">
-                  {t("balance_title")}
+                  Số dư của bạn
                 </h2>
                 {hasEnoughBalance ? (
                   <CheckCircle className="text-green-400 w-5 h-5" />
@@ -183,7 +181,7 @@ export default function PaymentSection({
               </p>
               {!hasEnoughBalance && (
                 <p className="text-red-400 text-sm mt-2">
-                  {t("insufficient_balance")}
+                  Số dư không đủ. Vui lòng nạp thêm.
                 </p>
               )}
             </div>
@@ -191,7 +189,7 @@ export default function PaymentSection({
             {/* Payment Methods */}
             <div className="bg-[#1a1d29] border border-[#2a2d3a] p-6 rounded-xl space-y-3">
               <h2 className="text-white font-semibold mb-3">
-                {t("payment_method_title")}
+                Phương thức thanh toán
               </h2>
 
               <button
@@ -210,10 +208,10 @@ export default function PaymentSection({
                   <Wallet className="text-blue-400 w-5 h-5" />
                   <div>
                     <p className="text-white font-semibold">
-                      {t("payment_balance")}
+                      Thanh toán bằng số dư
                     </p>
                     <p className="text-gray-400 text-xs">
-                      {t("payment_balance_desc")}
+                      Sử dụng tiền trong tài khoản của bạn
                     </p>
                   </div>
                 </div>
@@ -234,10 +232,10 @@ export default function PaymentSection({
                   <MessageSquare className="text-purple-400 w-5 h-5" />
                   <div>
                     <p className="text-white font-semibold">
-                      {t("payment_admin")}
+                      Liên hệ Admin mua trực tiếp
                     </p>
                     <p className="text-gray-400 text-xs">
-                      {t("payment_admin_desc")}
+                      Mua qua Discord hoặc các kênh hỗ trợ
                     </p>
                   </div>
                 </div>
@@ -249,24 +247,24 @@ export default function PaymentSection({
               <div className="bg-[#1a1d29] border border-[#2a2d3a] p-6 rounded-xl space-y-4">
                 <h2 className="text-white font-semibold flex items-center gap-2">
                   <Mail className="w-5 h-5 text-blue-400" />{" "}
-                  {t("email_info_title")}
+                  Thông tin nhận tài khoản
                 </h2>
                 <input
                   type="email"
-                  placeholder={t("email_placeholder")}
+                  placeholder="Nhập địa chỉ Email của bạn"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full bg-[#16171f] border border-[#2a2d3a] text-white rounded-lg px-4 py-3 focus:border-blue-500 outline-none"
                 />
                 <input
                   type="email"
-                  placeholder={t("confirm_email_placeholder")}
+                  placeholder="Xác nhận lại địa chỉ Email"
                   value={confirmEmail}
                   onChange={(e) => setConfirmEmail(e.target.value)}
                   className="w-full bg-[#16171f] border border-[#2a2d3a] text-white rounded-lg px-4 py-3 focus:border-blue-500 outline-none"
                 />
                 {confirmEmail && email !== confirmEmail && (
-                  <p className="text-red-400 text-xs">{t("email_mismatch")}</p>
+                  <p className="text-red-400 text-xs">Email xác nhận không khớp</p>
                 )}
               </div>
             )}
@@ -281,13 +279,13 @@ export default function PaymentSection({
                   className="mt-1 w-4 h-4 accent-blue-500"
                 />
                 <span className="text-gray-300 text-sm">
-                  {t("terms_text")}{" "}
+                  Tôi đã đọc và đồng ý với{" "}
                   <a href="#" className="text-blue-400 hover:underline">
-                    {t("terms_link")}
+                    Điều khoản dịch vụ
                   </a>{" "}
-                  {t("and")}{" "}
+                  và{" "}
                   <a href="#" className="text-blue-400 hover:underline">
-                    {t("warranty_link")}
+                    Chính sách bảo hành
                   </a>
                 </span>
               </label>
@@ -296,7 +294,7 @@ export default function PaymentSection({
 
           {/* RIGHT COLUMN */}
           <div className="lg:col-span-1 bg-[#1a1d29] border border-[#2a2d3a] rounded-xl p-6 sticky top-4">
-            <h2 className="text-white font-bold mb-4">{t("order_summary")}</h2>
+            <h2 className="text-white font-bold mb-4">Tóm tắt đơn hàng</h2>
             <img
               src={account.mainImageUrl || "/images/placeholder.png"}
               alt={account.title || "Account"}
@@ -304,18 +302,18 @@ export default function PaymentSection({
             />
             <div className="text-sm text-gray-300 space-y-2">
               <p>
-                <span className="text-gray-400">{t("game_label")}: </span>
+                <span className="text-gray-400">Trò chơi: </span>
                 <span className="text-white">{gameName}</span>
               </p>
               <p>
-                <span className="text-gray-400">{t("type_label")}: </span>
+                <span className="text-gray-400">Loại tài khoản: </span>
                 <span className="text-purple-400">
                   {account.typeAccount?.toUpperCase() || "NORMAL"}
                 </span>
               </p>
               <div className="border-t border-[#2a2d3a] my-3" />
               <div className="flex justify-between">
-                <span className="text-gray-400">{t("total_payment")}</span>
+                <span className="text-gray-400">Tổng thanh toán</span>
                 <span className="text-blue-400 font-bold">
                   ${accountPrice.toLocaleString("en-US")}
                 </span>
@@ -330,7 +328,7 @@ export default function PaymentSection({
                 className="mt-6 w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold flex items-center justify-center gap-2"
               >
                 <MessageSquare className="w-4 h-4" />
-                {t("contact_admin")}
+                Liên hệ Admin
               </Button>
             ) : (
               <Button
@@ -341,10 +339,10 @@ export default function PaymentSection({
                 {isProcessing ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    {t("processing")}
+                    Đang xử lý...
                   </>
                 ) : (
-                  t("confirm_payment")
+                  "Xác nhận mua hàng"
                 )}
               </Button>
             )}
@@ -353,9 +351,9 @@ export default function PaymentSection({
               <ShieldCheck className="text-green-400 w-5 h-5 flex-shrink-0" />
               <div>
                 <p className="text-green-400 font-semibold">
-                  {t("security_title")}
+                  Giao dịch an toàn
                 </p>
-                <p>{t("security_desc")}</p>
+                <p>Thông tin của bạn được mã hóa và bảo mật tuyệt đối.</p>
               </div>
             </div>
           </div>

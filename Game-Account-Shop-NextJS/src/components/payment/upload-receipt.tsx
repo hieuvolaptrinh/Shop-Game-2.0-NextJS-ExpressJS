@@ -3,14 +3,12 @@
 import { useState } from "react";
 import { Upload, CheckCircle } from "lucide-react";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
 
 interface UploadReceiptProps {
   onFileChange: (file: File | null) => void;
 }
 
 function UploadReceipt({ onFileChange }: UploadReceiptProps) {
-  const t = useTranslations("deposit");
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
@@ -50,10 +48,10 @@ function UploadReceipt({ onFileChange }: UploadReceiptProps) {
     <div className="bg-[#1a1d29] rounded-xl border border-[#2a2d3a] p-4 sm:p-6">
       <h2 className="text-lg sm:text-xl font-bold text-white mb-4 flex items-center gap-2">
         <Upload className="w-5 h-5 text-purple-400" />
-        {t("upload_bill")}
+        Tải lên hóa đơn
       </h2>
       <p className="text-gray-400 text-xs sm:text-sm mb-4">
-        {t("upload_description")}
+        Vui lòng chụp và tải lên ảnh biên lai đã chuyển tiền thành công để chúng tôi xác thực.
       </p>
 
       <div className="space-y-4">
@@ -89,7 +87,7 @@ function UploadReceipt({ onFileChange }: UploadReceiptProps) {
                     }}
                     className="text-blue-400 text-sm hover:text-blue-300"
                   >
-                    {t("change_file")}
+                    Thay đổi
                   </button>
                   <span className="text-gray-500">|</span>
                   <button
@@ -108,7 +106,7 @@ function UploadReceipt({ onFileChange }: UploadReceiptProps) {
               <>
                 <Upload className="w-10 h-10 sm:w-12 sm:h-12 text-gray-500 mx-auto mb-3" />
                 <p className="text-gray-400 text-sm sm:text-base mb-1">
-                  {t("click_to_upload")}
+                  Nhấp để chọn ảnh biên lai
                 </p>
                 <p className="text-gray-500 text-xs">
                   PNG, JPG, JPEG (Max 5MB)

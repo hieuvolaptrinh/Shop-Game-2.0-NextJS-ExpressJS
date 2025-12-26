@@ -3,7 +3,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { Wallet, ShoppingBag, Receipt, Package } from "lucide-react";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
 import DepositCard from "@/components/cards/deposit-card";
 import PurchaseCard from "@/components/cards/purchase-card";
 import { getMyDepositRequests } from "@/apis/request-deposit.api";
@@ -12,7 +11,6 @@ import { myOrders } from "@/apis/purchase.api";
 type TabType = "deposit" | "purchase";
 
 export default function HistoriesSection() {
-  const t = useTranslations("histories");
   const [activeTab, setActiveTab] = useState<TabType>("deposit");
 
   // ====== DEPOSIT STATE ======
@@ -86,8 +84,8 @@ export default function HistoriesSection() {
       return (
         <div className="text-center py-20 bg-[#1a1d29]/80 border border-[#2a2d3a] rounded-xl">
           <Package className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-          <p className="text-gray-400 text-lg">{t("no_deposit_found")}</p>
-          <p className="text-gray-500 text-sm">{t("no_deposit_description")}</p>
+          <p className="text-gray-400 text-lg">Chưa có lịch sử nạp tiền</p>
+          <p className="text-gray-500 text-sm">Các yêu cầu nạp tiền của bạn sẽ xuất hiện tại đây</p>
         </div>
       );
     }
@@ -111,9 +109,9 @@ export default function HistoriesSection() {
       return (
         <div className="text-center py-20 bg-[#1a1d29]/80 border border-[#2a2d3a] rounded-xl">
           <Package className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-          <p className="text-gray-400 text-lg">{t("no_purchase_found")}</p>
+          <p className="text-gray-400 text-lg">Chưa có lịch sử mua nick</p>
           <p className="text-gray-500 text-sm">
-            {t("no_purchase_description")}
+            Các tài khoản game bạn đã mua sẽ xuất hiện tại đây
           </p>
         </div>
       );
@@ -146,9 +144,9 @@ export default function HistoriesSection() {
           <header className="mb-8">
             <h1 className="text-3xl font-bold text-white flex items-center gap-3 mb-2">
               <Receipt className="w-8 h-8 text-blue-400" />
-              {t("page_title")}
+              Lịch Sử Giao Dịch
             </h1>
-            <p className="text-gray-400">{t("page_description")}</p>
+            <p className="text-gray-400">Quản lý và theo dõi các giao dịch của bạn tại hệ thống</p>
           </header>
 
           {/* TABS */}
@@ -162,7 +160,7 @@ export default function HistoriesSection() {
               }`}
             >
               <Wallet className="w-5 h-5" />
-              <span>{t("deposit_tab")}</span>
+              <span>Nạp tiền</span>
               <span
                 className={`px-2 py-0.5 rounded-full text-xs ${
                   activeTab === "deposit"
@@ -183,7 +181,7 @@ export default function HistoriesSection() {
               }`}
             >
               <ShoppingBag className="w-5 h-5" />
-              <span>{t("purchase_tab")}</span>
+              <span>Mua nick</span>
               <span
                 className={`px-2 py-0.5 rounded-full text-xs ${
                   activeTab === "purchase"
