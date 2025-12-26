@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
 export default function useClickOutSide(callback?: () => void) {
   const nodeRef = useRef<HTMLDivElement>(null);
@@ -8,9 +8,9 @@ export default function useClickOutSide(callback?: () => void) {
         callback?.();
       }
     }
-    document.addEventListener('click', handleClickOutSide);
+    document.addEventListener("click", handleClickOutSide);
     return () => {
-      document.removeEventListener('click', handleClickOutSide);
+      document.removeEventListener("click", handleClickOutSide);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
