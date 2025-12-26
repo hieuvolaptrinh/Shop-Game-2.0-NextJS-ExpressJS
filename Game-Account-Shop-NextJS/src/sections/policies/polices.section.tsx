@@ -102,29 +102,16 @@ function PolicesSection() {
   const t = useTranslations("policies");
 
   return (
-    <div className="min-h-screen relative">
-      {/* Background */}
-      <div className="fixed inset-0 z-[-1]">
-        <Image
-          src="/images/background_hks_2.jpg"
-          alt="Background"
-          fill
-          className="object-cover"
-          priority
-        />
-        <div className="absolute inset-0 bg-black/75" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/60" />
-      </div>
-
+    <div className="min-h-screen relative bg-gray-50">
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 py-12 md:py-16 max-w-7xl">
         {/* Header */}
         <div className="text-center mb-12 md:mb-16">
-          <h1 className="text-3xl md:text-5xl font-bold text-white mb-4 tracking-tight">
+          <h1 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4 tracking-tight">
             {t("page_title")}
           </h1>
           <div className="h-1 w-20 bg-gradient-to-r from-blue-500 to-cyan-500 mx-auto rounded-full mb-4" />
-          <p className="text-gray-300 text-sm md:text-base max-w-2xl mx-auto">
+          <p className="text-gray-600 text-sm md:text-base max-w-2xl mx-auto">
             {t("page_subtitle")}
           </p>
         </div>
@@ -134,20 +121,20 @@ function PolicesSection() {
           {policiesData.map((policy) => (
             <div
               key={policy.id}
-              className={`group bg-gradient-to-br ${policy.gradient} backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-white/10 hover:border-white/30 transition-all duration-300 hover:shadow-2xl hover:shadow-blue-500/10`}
+              className={`group bg-white rounded-2xl p-6 md:p-8 border border-gray-100 shadow-sm hover:shadow-xl hover:shadow-blue-500/10 transition-all duration-300`}
             >
               <div className="flex flex-col md:flex-row items-start gap-5 md:gap-6">
                 {/* Icon */}
-                <div className="text-5xl md:text-6xl flex-shrink-0 transform group-hover:scale-110 transition-transform duration-300">
+                <div className="text-5xl md:text-6xl flex-shrink-0 transform group-hover:scale-110 transition-transform duration-300 grayscale-[0.2] group-hover:grayscale-0">
                   {policy.icon}
                 </div>
 
                 {/* Content */}
                 <div className="flex-1 w-full">
-                  <h3 className="text-xl md:text-2xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors">
+                  <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
                     {t(policy.titleKey)}
                   </h3>
-                  <p className="text-gray-300 mb-5 leading-relaxed text-sm md:text-base">
+                  <p className="text-gray-600 mb-5 leading-relaxed text-sm md:text-base">
                     {t(policy.descriptionKey)}
                   </p>
 
@@ -156,9 +143,9 @@ function PolicesSection() {
                     {policy.detailKeys.map((detail, index) => (
                       <li
                         key={index}
-                        className="flex items-start gap-3 text-gray-300 text-sm md:text-base"
+                        className="flex items-start gap-3 text-gray-600 text-sm md:text-base"
                       >
-                        <span className="text-blue-400 mt-1 flex-shrink-0 font-bold">
+                        <span className="text-blue-500 mt-1 flex-shrink-0 font-bold">
                           ✓
                         </span>
                         <span className="leading-relaxed">{t(detail.key)}</span>
@@ -173,8 +160,8 @@ function PolicesSection() {
 
         {/* Contact Section */}
         <div className="max-w-6xl mx-auto">
-          <div className="bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-pink-600/20 backdrop-blur-sm border border-blue-400/30 rounded-2xl p-6 md:p-8">
-            <h3 className="text-xl md:text-2xl font-bold text-white text-center mb-6">
+          <div className="bg-white border border-gray-200 shadow-lg rounded-2xl p-6 md:p-8">
+            <h3 className="text-xl md:text-2xl font-bold text-gray-900 text-center mb-6">
               {t("contact_title")}
             </h3>
 
@@ -182,16 +169,16 @@ function PolicesSection() {
               {/* Email */}
               <a
                 href="mailto:proofbga@gmail.com"
-                className="group flex items-center gap-4 bg-black/30 hover:bg-black/50 border border-white/10 hover:border-blue-400/50 rounded-xl p-4 md:p-5 transition-all duration-300"
+                className="group flex items-center gap-4 bg-gray-50 hover:bg-blue-50 border border-gray-200 hover:border-blue-200 rounded-xl p-4 md:p-5 transition-all duration-300"
               >
-                <div className="bg-blue-500/20 p-3 rounded-lg group-hover:bg-blue-500/30 transition-colors">
-                  <Mail className="w-6 h-6 text-blue-400" />
+                <div className="bg-blue-100 p-3 rounded-lg group-hover:bg-blue-200 transition-colors">
+                  <Mail className="w-6 h-6 text-blue-600" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-gray-400 text-xs md:text-sm mb-1">
+                  <p className="text-gray-500 text-xs md:text-sm mb-1">
                     {t("contact_email")}
                   </p>
-                  <p className="text-white font-semibold text-sm md:text-base truncate">
+                  <p className="text-gray-900 font-semibold text-sm md:text-base truncate">
                     proofbga@gmail.com
                   </p>
                 </div>
@@ -202,16 +189,16 @@ function PolicesSection() {
                 href="https://discord.gg/8DrYCxTV7u"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex items-center gap-4 bg-black/30 hover:bg-black/50 border border-white/10 hover:border-purple-400/50 rounded-xl p-4 md:p-5 transition-all duration-300"
+                className="group flex items-center gap-4 bg-gray-50 hover:bg-purple-50 border border-gray-200 hover:border-purple-200 rounded-xl p-4 md:p-5 transition-all duration-300"
               >
-                <div className="bg-purple-500/20 p-3 rounded-lg group-hover:bg-purple-500/30 transition-colors">
-                  <MessageCircle className="w-6 h-6 text-purple-400" />
+                <div className="bg-purple-100 p-3 rounded-lg group-hover:bg-purple-200 transition-colors">
+                  <MessageCircle className="w-6 h-6 text-purple-600" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-gray-400 text-xs md:text-sm mb-1">
+                  <p className="text-gray-500 text-xs md:text-sm mb-1">
                     {t("contact_discord")}
                   </p>
-                  <p className="text-white font-semibold text-sm md:text-base truncate">
+                  <p className="text-gray-900 font-semibold text-sm md:text-base truncate">
                     https://discord.gg/8DrYCxTV7u
                   </p>
                 </div>

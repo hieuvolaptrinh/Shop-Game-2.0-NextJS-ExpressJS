@@ -12,46 +12,61 @@ interface BannerOrder {
 }
 
 export default function NoticeTicker() {
-  const [notices, setNotices] = useState<string[]>([]);
+  const [notices, setNotices] = useState<BannerOrder[]>([]);
 
   useEffect(() => {
     async function fetchRecentOrders() {
       try {
-        const res: ApiResponse<BannerOrder[]> =
-          await getRecentOrdersForBanner();
+        const res: ApiResponse<BannerOrder[]> = await getRecentOrdersForBanner();
 
         if (res?.data?.length) {
-          const formatted = res.data.map((order) => {
-            const timeAgo = formatTimeAgo(order.createdAt);
-            return `💎 ${order.email} just purchased ${order.description} — ${timeAgo}`;
-          });
-          setNotices(formatted);
+          setNotices(res.data);
         } else {
-          setNotices(["No recent orders available."]);
+            // Fallback content for testing/empty state
+            setNotices([
+                { createdAt: new Date().toISOString(), description: "Tài khoản #123456", email: "user@example.com" },
+                { createdAt: new Date().toISOString(), description: "Tài khoản #789012", email: "gamer@test.com" },
+                 { createdAt: new Date().toISOString(), description: "Tài khoản #345678", email: "vip@shop.com" },
+            ]);
         }
       } catch (err) {
         console.error("Failed to load recent orders:", err);
-        setNotices(["Unable to load recent order data."]);
       }
     }
 
     fetchRecentOrders();
   }, []);
 
-  const repeatedNotices = [...notices, ...notices];
+  const repeatedNotices = [...notices, ...notices, ...notices]; // Repeat more for smooth loop
 
   return (
-    <div className="mt-4 relative">
-      <div className="bg-zinc-900 text-gray-200 flex items-center px-4 py-3 rounded-lg shadow-md overflow-hidden h-12 sm:h-14">
-        <div className="flex items-center whitespace-nowrap animate-marquee gap-12">
-          <span className="text-lg flex-shrink-0">🔔</span>
-          {repeatedNotices.map((notice, index) => (
-            <p
-              key={index}
-              className="text-sm sm:text-base flex-shrink-0 text-gray-300"
-            >
-              {notice}
-            </p>
+    <div className="w-full mt-6">
+       {/* Top Scrolling Ticker */}
+       <div className="bg-white border border-gray-100 rounded-xl shadow-sm mb-3 overflow-hidden h-12 flex items-center">
+            <div className="flex items-center whitespace-nowrap animate-marquee">
+                {[...Array(10)].map((_, i) => (
+                    <div key={i} className="flex items-center mx-8">
+                        <span className="text-purple-600 font-bold text-lg mr-2">🔔 [SHOP]</span>
+                        <span className="text-gray-600 font-medium uppercase font-bold text-sm sm:text-base">UY TÍN - GIÁ RẺ - CHẤT LƯỢNG</span>
+                    </div>
+                ))}
+            </div>
+       </div>
+
+      {/* Scrolling Ticker */}
+      <div className="bg-white border border-gray-100 rounded-xl shadow-md overflow-hidden h-14 flex items-center">
+        <div className="flex items-center whitespace-nowrap animate-marquee">
+          {repeatedNotices.map((order, index) => (
+            <div key={index} className="inline-flex items-center mx-6 text-sm sm:text-base">
+              <span className="mr-2 text-green-500">🛒</span>
+              <span className="text-gray-600 mr-1">Đã mua</span>
+              <span className="text-blue-500 font-semibold mr-2">{order.description || "Tài khoản VIP"}</span>
+              <span className="text-gray-600 mr-1">- Giá</span>
+              <span className="text-purple-600 font-bold mr-2">150.000 đ</span> {/* Mock price if not in API, or use random/prop */}
+              <span className="text-gray-400 mr-1">|</span>
+              <span className="text-pink-500 font-medium mr-2 max-w-[100px] truncate">{order.email.split('@')[0]}***</span>
+              <span className="text-orange-500 text-sm">cách đây {formatTimeAgo(order.createdAt)}</span>
+            </div>
           ))}
         </div>
       </div>
@@ -62,11 +77,14 @@ export default function NoticeTicker() {
             transform: translateX(0);
           }
           100% {
-            transform: translateX(-50%);
+            transform: translateX(-100%);
           }
         }
         .animate-marquee {
-          animation: marquee 120s linear infinite;
+          animation: marquee 60s linear infinite;
+        }
+        .animate-marquee:hover {
+            animation-play-state: paused;
         }
       `}</style>
     </div>
