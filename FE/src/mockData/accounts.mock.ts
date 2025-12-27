@@ -1,0 +1,129 @@
+import { Account } from "@/types/index.type";
+import { MOCK_ACCOUNT_TYPES } from "./account-types.mock";
+
+const skinLienQuan = [
+  { name: "Capheny Càn Nguyên Điện Chủ", type: "3S" },
+  { name: "Tulen Chí Tôn Kiếm Tiên", type: "3S" },
+  { name: "Nakroth Thứ Nguyên Vệ Thần", type: "3S" },
+  { name: "Airi Bích Hải Thánh Nữ", type: "3S" },
+  { name: "Lauriel Thứ Nguyên Vệ Thần", type: "3S" },
+  { name: "Raz Chiến Thần Muay Thái", type: "2S" },
+  { name: "Liliana Nguyệt Mị Ly", type: "2S" },
+  { name: "Valhein Vũ Khí Tối Thượng", type: "2S" },
+  { name: "Yorn Thế Tử Nguyệt Tộc", type: "2S" },
+  { name: "Murad Siêu Việt", type: "2S" }
+];
+
+export const MOCK_ACCOUNTS: Account[] = [
+  // --- NICK RANK LIÊN QUÂN ---
+  {
+    _id: "lq-rank-1",
+    typeId: "type-rank-lq",
+    type: MOCK_ACCOUNT_TYPES.find(t => t._id === "type-rank-lq"),
+    price: 3500000,
+    rank: "Chiến Thần",
+    generalCount: 118,
+    skinCount: 450,
+    images: [{ url: "/types_account/type1.jpg" }, { url: "/types_account/type2.jpg" }, { url: "/types_account/type3.jpg" }],
+    features: [skinLienQuan[2], skinLienQuan[4], skinLienQuan[5]],
+    description: "Tài khoản Chiến Thần cực khét, full tướng full ngọc, skin 3S xịn xò.",
+    status: "AVAILABLE",
+    createdAt: new Date().toISOString(),
+  },
+  {
+    _id: "lq-rank-2",
+    typeId: "type-rank-lq",
+    type: MOCK_ACCOUNT_TYPES.find(t => t._id === "type-rank-lq"),
+    price: 850000,
+    rank: "Cao Thủ",
+    generalCount: 95,
+    skinCount: 180,
+    images: [{ url: "/types_account/type4.jpg" }, { url: "/types_account/type5.jpg" }],
+    features: [skinLienQuan[6], skinLienQuan[9]],
+    description: "Acc rank Cao Thủ, trắng thông tin, Liliana Nguyệt Mị Ly.",
+    status: "AVAILABLE",
+    createdAt: new Date().toISOString(),
+  },
+
+  // --- NICK REG LIÊN QUÂN ---
+  {
+    _id: "lq-reg-1",
+    typeId: "type-reg-lq",
+    type: MOCK_ACCOUNT_TYPES.find(t => t._id === "type-reg-lq"),
+    price: 150000,
+    rank: "Đồng",
+    generalCount: 30,
+    skinCount: 15,
+    images: [{ url: "/types_account/type6.jpg" }, { url: "/types_account/type7.jpg" }],
+    features: [skinLienQuan[7]],
+    description: "Acc Reg mới, trắng thông tin 100%, có sẵn skin Valhein VT.",
+    status: "AVAILABLE",
+    createdAt: new Date().toISOString(),
+  },
+  {
+    _id: "lq-reg-2",
+    typeId: "type-reg-lq",
+    type: MOCK_ACCOUNT_TYPES.find(t => t._id === "type-reg-lq"),
+    price: 120000,
+    rank: "Bạc",
+    generalCount: 25,
+    skinCount: 10,
+    images: [{ url: "/types_account/type11.jpg" }],
+    features: [],
+    description: "Acc reg trắng thông tin, phù hợp cho người chơi mới.",
+    status: "AVAILABLE",
+    createdAt: new Date().toISOString(),
+  },
+
+  // --- TÚI MÙ LIÊN QUÂN ---
+  {
+    _id: "lq-lucky-1",
+    typeId: "type-lucky-lq",
+    type: MOCK_ACCOUNT_TYPES.find(t => t._id === "type-lucky-lq"),
+    price: 25000,
+    rank: "Ngẫu nhiên",
+    images: [{ url: "/types_account/type10.jpg" }, { url: "/types_account/type8.jpg" }],
+    features: [],
+    description: "Thử vận may với túi mù Liên Quân, tỉ lệ trúng skin cực phẩm.",
+    status: "AVAILABLE",
+    createdAt: new Date().toISOString(),
+  },
+  {
+    _id: "lq-lucky-2",
+    typeId: "type-lucky-lq",
+    type: MOCK_ACCOUNT_TYPES.find(t => t._id === "type-lucky-lq"),
+    price: 50000,
+    rank: "Cao Cấp",
+    images: [{ url: "/types_account/type3.jpg" }],
+    features: [],
+    description: "Túi mù cao cấp, tăng tỉ lệ trúng nick rank cao.",
+    status: "AVAILABLE",
+    createdAt: new Date().toISOString(),
+  },
+
+  // --- RANDOM LIÊN QUÂN ---
+  {
+    _id: "lq-random-1",
+    typeId: "type-random-lq",
+    type: MOCK_ACCOUNT_TYPES.find(t => t._id === "type-random-lq"),
+    price: 9000,
+    rank: "Ngẫu nhiên",
+    images: [{ url: "/types_account/type12.jpg" }],
+    features: [],
+    description: "Random Liên Quân giá rẻ nhất thị trường.",
+    status: "AVAILABLE",
+    createdAt: new Date().toISOString(),
+  },
+  {
+    _id: "lq-random-2",
+    typeId: "type-random-lq",
+    type: MOCK_ACCOUNT_TYPES.find(t => t._id === "type-random-lq"),
+    price: 19000,
+    rank: "Trung Cấp",
+    images: [{ url: "/types_account/type1.jpg" }],
+    features: [],
+    description: "Random Liên Quân 19k, cơ hội nhận nick nhiều tướng.",
+    status: "AVAILABLE",
+    createdAt: new Date().toISOString(),
+  }
+];

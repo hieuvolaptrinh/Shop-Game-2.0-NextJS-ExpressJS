@@ -39,12 +39,29 @@ export interface UserToken extends BaseEntity {
 }
 
 /**
- * Account type entity
+ * Layer 1: Account Category (Mục lớn trên trang chủ)
+ * Ví dụ: "ACC REG - TRẮNG THÔNG TIN", "ACC RANK - TRẮNG THÔNG TIN"
+ */
+export interface AccountCategory extends BaseEntity {
+  name: string;
+  slug: string;
+  icon?: string;
+  image?: string;
+  order?: number;
+}
+
+/**
+ * Layer 2: Account Type (Các thẻ Card trong mục lớn)
+ * Ví dụ: "NIC REG LIÊN QUÂN TRẮNG", "NICK RANK SIÊU CẤP"
  */
 export interface AccountType extends BaseEntity {
+  categoryId: string;
+  category?: AccountCategory; // Populated
   name: string;
+  slug: string;
   description?: string;
   icon?: string;
+  image?: string;
 }
 
 /**

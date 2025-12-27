@@ -9,19 +9,24 @@ import {
   normalizeAccountType,
 } from "@/utils/format-slug.util";
 import type { Metadata } from "next";
+import { MOCK_ACCOUNTS, MOCK_ACCOUNT_TYPES, MOCK_ACCOUNT_CATEGORIES } from "@/mockData";
+
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string; id: string }>;
 }): Promise<Metadata> {
   const { slug, id } = await params;
-  const { gameName: slugGameName, type } = parseOneLevelSlug(slug);
+  const accountId = parseSlugId(id);
+  const account = MOCK_ACCOUNTS.find(acc => acc._id === accountId);
+  
+  if (!account) return { title: "Không tìm thấy tài khoản" };
 
-  const gameName = slugGameName;
-  const price = 450000; // Mock price
+  const gameName = account.type?.name || "Liên Quân Mobile";
+  const price = account.price;
 
-  const accountName = `Tài khoản ${gameName} #${id}`;
-  const description = `Tài khoản game ${gameName} cao cấp với thông tin đã được xác thực. Giao hàng ngay lập tức sau khi mua.`;
+  const accountName = `Tài khoản ${gameName} #${accountId}`;
+  const description = account.description;
 
   return {
     title: `${accountName} - Mua tài khoản ${gameName}`,
@@ -37,7 +42,7 @@ export async function generateMetadata({
       title: `${accountName} - ${gameName}`,
       description: `Tài khoản ${gameName} cao cấp - ${price.toLocaleString("vi-VN")}đ`,
       type: "website",
-      images: [],
+      images: account.images.map(img => img.url),
     },
   };
 }
@@ -48,39 +53,25 @@ export default async function AccountDetailPage({
   params: Promise<{ slug: string; id: string }>;
 }) {
   const { slug, id } = await params;
-  
   const accountId = parseSlugId(id);
+  
+  const account = MOCK_ACCOUNTS.find(acc => acc._id === accountId);
 
-  const { gameName, gameId, type } = parseOneLevelSlug(slug);
-  const accountType = normalizeAccountType(type);
-  if (!accountType) {
+  if (!account) {
     notFound();
   }
 
-  // Mock account data
-  const account: any = {
-      gameAccountId: accountId || 123456,
-      status: "available",
-      gameCategoryId: Number(gameId) || 1,
-      title: `${gameName} Premium Account #${accountId}`,
-      originalPrice: 650000,
-      currentPrice: 450000,
-      description: "Tài khoản trắng thông tin 100%, bảo hành trọn đời. Có nhiều tướng và skin hiếm. Thích hợp cho game thủ muốn try hard rank cao.",
-      mainImageUrl: "/images/types_account/type1.jpg",
-      typeAccount: accountType.display,
-      images: [
-          { imageUrl: "/images/types_account/type2.jpg" },
-          { imageUrl: "/images/types_account/type3.jpg" },
-          { imageUrl: "/images/types_account/type4.jpg" }
-      ]
-  };
+  const accountType = MOCK_ACCOUNT_TYPES.find(t => t._id === account.typeId);
+  const category = MOCK_ACCOUNT_CATEGORIES.find(c => c._id === accountType?.categoryId);
+  const gameName = accountType?.name || "Liên Quân Mobile";
+  const categoryName = category?.name || "Game";
 
   return (
     <>
       {/* Background */}
       <div className="fixed inset-0 z-[-1]">
         <Image
-          src="/images/background_hks_2.jpg"
+          src={account.images[0].url}
           alt="Background"
           fill
           className="object-cover"
@@ -97,32 +88,26 @@ export default async function AccountDetailPage({
           <div className="mb-6 text-sm">
             <Link
               href={ROUTES.HOME}
-              className="text-gray-400 hover:text-white"
+              className="text-gray-400 hover:text-black dark:hover:text-white hover:underline hover:font-semibold transition-all duration-200"
             >
               Trang chủ
             </Link>
             <span className="text-gray-600 mx-2">/</span>
             <Link
-              href={GameRoutes.game(gameName, gameId) as any}
-              className="text-gray-400 hover:text-white"
+              href={`/${category?.slug}`}
+              className="text-gray-400 hover:text-black dark:hover:text-white hover:underline hover:font-semibold transition-all duration-200"
+            >
+              {categoryName}
+            </Link>
+            <span className="text-gray-600 mx-2">/</span>
+            <Link
+              href={`/${accountType?.slug}`}
+              className="text-gray-400 hover:text-black dark:hover:text-white hover:underline hover:font-semibold transition-all duration-200"
             >
               {gameName}
             </Link>
             <span className="text-gray-600 mx-2">/</span>
-            <Link
-              href={
-                GameRoutes.accountType(
-                  gameName,
-                  gameId,
-                  accountType.slug
-                ) as any
-              }
-              className="text-gray-400 hover:text-white"
-            >
-              Danh mục {accountType.display}
-            </Link>
-            <span className="text-gray-600 mx-2">/</span>
-            <span className="text-white">#{account.gameAccountId}</span>
+            <span className="text-gray-900 dark:text-white font-bold">#{account._id}</span>
           </div>
 
           {/* Account Detail Section */}

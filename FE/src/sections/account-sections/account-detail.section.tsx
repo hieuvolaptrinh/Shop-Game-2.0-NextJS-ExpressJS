@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { GameAccount } from "@/types/game-account.type";
+import { Account } from "@/types/index.type";
 import { useRouter } from "next/navigation";
 import { GameRoutes, ROUTES } from "@/routes";
 import {
@@ -19,7 +19,7 @@ import {
 import { cn } from "@/lib/utils";
 
 interface AccountDetailSectionProps {
-  account: GameAccount;
+  account: Account;
   gameName: string;
 }
 
@@ -30,30 +30,25 @@ function AccountDetailSection({
   const router = useRouter();
   const [selectedImage, setSelectedImage] = useState(0);
 
-  const originalPrice = Number(account.originalPrice || 0);
-  const currentPrice = Number(account.currentPrice || 0);
-  const hasDiscount = originalPrice > 0 && originalPrice > currentPrice;
-  const discountPercent = hasDiscount
-    ? Math.round(((originalPrice - currentPrice) / originalPrice) * 100)
-    : 0;
+  const currentPrice = Number(account.price || 0);
+  const originalPrice = Math.round(currentPrice * 1.25); // Mock 25% discount logic
+  const hasDiscount = true; // For demo aesthetics
+  const discountPercent = 25;
 
   const handleBuyNow = () => {
     router.push(
       GameRoutes.accountPayment(
         gameName,
-        account.gameCategoryId,
-        account.typeAccount?.toLowerCase() || "normal",
-        account.description || `Account ${account.gameAccountId}`,
-        account.gameAccountId
+        account.typeId,
+        account.type?.slug || "normal",
+        account.description || `Account ${account._id}`,
+        account._id
       )
     );
   };
 
-  const allImages = account.images?.map((img: any) => img.imageUrl) || [];
-  if (account.mainImageUrl && !allImages.includes(account.mainImageUrl)) {
-    allImages.unshift(account.mainImageUrl);
-  }
-
+  const allImages = account.images?.map((img: any) => img.url) || [];
+  
   const nextImage = () =>
     setSelectedImage((prev) => (prev + 1) % allImages.length);
   const prevImage = () =>
@@ -79,7 +74,7 @@ function AccountDetailSection({
             />
 
             {/* Status Overlays */}
-            {account.status === "sold" && (
+            {account.status === "SOLD" && (
               <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-20">
                 <div className="bg-destructive text-white px-6 py-3 rounded-lg text-xl font-bold uppercase tracking-widest shadow-lg">
                   ĐÃ BÁN
@@ -115,7 +110,7 @@ function AccountDetailSection({
             <div className="absolute top-0 right-0 z-10">
               <div className="bg-primary text-primary-foreground px-4 py-1.5 font-bold text-sm rounded-bl-lg shadow-sm flex items-center gap-1">
                 <span className="text-[10px] opacity-80 uppercase">Mã số:</span>
-                <span>{account.gameAccountId}</span>
+                <span>{account._id}</span>
               </div>
             </div>
           </div>
@@ -202,7 +197,7 @@ function AccountDetailSection({
                 {gameName}
               </span>
               <span className="bg-primary/10 text-primary text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider">
-                #{account.gameAccountId}
+                #{account._id}
               </span>
             </div>
             <h1 className="text-lg font-bold text-foreground leading-snug">
@@ -243,7 +238,7 @@ function AccountDetailSection({
 
           {/* Action Buttons */}
           <div className="space-y-2">
-            {account.status === "available" ? (
+            {account.status === "AVAILABLE" ? (
               <>
                 <button
                   onClick={handleBuyNow}

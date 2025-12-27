@@ -21,7 +21,7 @@ export function createSlugWithId(text: string, id: number | string): string {
  * Ví dụ: account-name-123.html
  */
 export function createSlugHtml(text: string, id: number | string): string {
-  return `${createSlug(text)}-${id}.html`;
+  return `${createSlug(text)}-ms-${id}.html`;
 }
 
 /**
@@ -34,7 +34,13 @@ export function parseSlugId(slug: string): string {
   // Loại bỏ .html nếu có
   const cleanSlug = slug.replace(".html", "");
 
-  // Lấy phần cuối cùng sau dấu gạch ngang
+  // Tìm separator '-ms-'
+  if (cleanSlug.includes("-ms-")) {
+    const parts = cleanSlug.split("-ms-");
+    return parts[parts.length - 1]; // Trả về phần sau '-ms-'
+  }
+
+  // Fallback cho logic cũ (lấy phần cuối sau dấu gạch ngang)
   const parts = cleanSlug.split("-");
   return parts[parts.length - 1];
 }
@@ -46,10 +52,21 @@ export function parseSlugWithId(slug: string): {
   gameName: string;
   gameId: string;
 } {
-  const gameId = parseSlugId(slug);
-  const slugParts = slug.replace(".html", "").split("-");
-  const gameName = slugParts
-    .slice(0, -1)
+  const cleanSlug = slug.replace(".html", "");
+  let gameId = "";
+  let textPart = "";
+
+  if (cleanSlug.includes("-ms-")) {
+    const parts = cleanSlug.split("-ms-");
+    gameId = parts[parts.length - 1];
+    textPart = parts.slice(0, -1).join("-ms-");
+  } else {
+    gameId = parseSlugId(slug);
+    textPart = cleanSlug.split("-").slice(0, -1).join("-");
+  }
+
+  const gameName = textPart
+    .split("-")
     .join(" ")
     .replace(/\b\w/g, (char: string) => char.toUpperCase());
 

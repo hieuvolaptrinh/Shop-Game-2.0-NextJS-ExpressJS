@@ -37,14 +37,15 @@ export const applyFilters = (
     filtered = filtered.filter(
       (acc) =>
         acc.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        acc.gameAccountId?.toString().includes(searchQuery)
+        acc._id?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        acc.rank?.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }
 
   if (sortBy === "price_asc") {
-    filtered.sort((a, b) => (a.currentPrice || 0) - (b.currentPrice || 0));
+    filtered.sort((a, b) => (a.price || 0) - (b.price || 0));
   } else if (sortBy === "price_desc") {
-    filtered.sort((a, b) => (b.currentPrice || 0) - (a.currentPrice || 0));
+    filtered.sort((a, b) => (b.price || 0) - (a.price || 0));
   }
 
   return filtered;

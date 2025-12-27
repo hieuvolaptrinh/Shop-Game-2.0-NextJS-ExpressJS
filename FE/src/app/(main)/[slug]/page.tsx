@@ -19,6 +19,8 @@ import {
   normalizeAccountType,
 } from "@/utils/format-slug.util";
 
+import { MOCK_ACCOUNTS, MOCK_ACCOUNT_CATEGORIES, MOCK_ACCOUNT_TYPES } from "@/mockData";
+
 export const revalidate = 30;
 
 export async function generateMetadata({
@@ -27,16 +29,31 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const { gameName, type } = parseOneLevelSlug(slug);
   
-  if (!type) return { title: "Tài Khoản Game" };
+  // 1. Check if it's an AccountType slug (Layer 2)
+  const accountType = MOCK_ACCOUNT_TYPES.find(t => t.slug === slug);
+  if (accountType) {
+    return {
+      title: `${accountType.name} - Uy Tín & Chất Lượng`,
+      description: `Danh sách ${accountType.name.toLowerCase()}. Giao dịch an toàn, nhận acc ngay.`,
+    };
+  }
 
-  const accountType = normalizeAccountType(type);
-  const typeLabel = accountType.display;
+  // 2. Check if it's a Category slug (Layer 1) - Optional, but good for SEO
+  const category = MOCK_ACCOUNT_CATEGORIES.find(cat => cat.slug === slug);
+  if (category) {
+    return {
+      title: `${category.name} - Hệ Thống Bán Acc Liên Quân`,
+      description: `Tổng hợp các ${category.name.toLowerCase()}.`,
+    };
+  }
+
+  const { gameName, gameId } = parseOneLevelSlug(slug);
+  if (!gameId) return { title: "Không tìm thấy trang" };
 
   return {
-    title: `Mua Tài Khoản ${gameName} ${typeLabel} - Uy Tín & Chất Lượng`,
-    description: `Danh sách tài khoản ${typeLabel.toLowerCase()} ${gameName}. Giao dịch an toàn, nhận acc ngay.`,
+    title: `Mua Tài Khoản ${gameName} - Uy Tín & Chất Lượng`,
+    description: `Danh sách tài khoản ${gameName}. Giao dịch an toàn, nhận acc ngay.`,
   };
 }
 
@@ -51,41 +68,43 @@ export default async function AccountListPage({
   const { page: rawPage } = await searchParams;
   const currentPage = Math.max(Number(rawPage) || 1, 1);
 
-  let { gameName, gameId, type } = parseOneLevelSlug(slug);
+  const { gameName, gameId, type } = parseOneLevelSlug(slug);
 
-  if (!gameId) gameId = 1; 
-  if (!type) type = "acc-reg";
-  if (!gameName) gameName = slug;
+  // 1. Check if slug is an AccountType Slug (Layer 2)
+  const accountType = MOCK_ACCOUNT_TYPES.find(t => t.slug === slug);
+  
+  let accounts: any[] = [];
+  let title = "";
+  let displayType = "";
 
-  const accountType = normalizeAccountType(type);
+  if (accountType) {
+    title = accountType.name;
+    displayType = accountType.slug;
+    accounts = MOCK_ACCOUNTS.filter(acc => acc.typeId === accountType._id);
+  } else {
+    // 2. Check if it's a Category Slug (Layer 1)
+    const category = MOCK_ACCOUNT_CATEGORIES.find(cat => cat.slug === slug);
+    if (category) {
+       title = category.name;
+       displayType = category.slug;
+       const typeIds = MOCK_ACCOUNT_TYPES.filter(t => t.categoryId === category._id).map(t => t._id);
+       accounts = MOCK_ACCOUNTS.filter(acc => typeIds.includes(acc.typeId));
+    } else {
+       // 3. Fallback to Game ID parsing
+       if (!gameId) {
+         notFound();
+       }
 
-  let totalPages = 3;
+       title = `Tài Khoản ${gameName}`;
+       displayType = "normal";
+       accounts = MOCK_ACCOUNTS.filter(acc => 
+          acc.type?.name.toUpperCase().includes(gameName.toUpperCase()) || 
+          acc.typeId.includes(gameId.toString())
+       );
+    }
+  }
 
-  const accounts: any[] = Array.from({ length: 12 }).map((_, i) => {
-    const mockId = 1000000 + Math.floor(Math.random() * 9000000);
-    const mockPrices = [170000, 220000, 199999, 1399999, 80000, 110000, 450000, 300000];
-    const price = mockPrices[i % mockPrices.length];
-    
-    return {
-      gameAccountId: mockId,
-      status: "available",
-      gameCategoryId: Number(gameId) || 1,
-      title: `${gameName} - Tài khoản Vip #${i + 1}`,
-      originalPrice: price * 1.5,
-      currentPrice: price,
-      description: "Trắng thông tin, bảo hành trọn đời, hỗ trợ đổi trả nếu lỗi.",
-      mainImageUrl: `/images/types_account/type${(i % 12) + 1}.jpg`,
-      typeAccount: (type as any) || "Normal",
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      gameCategory: {
-          gameCategoryId: Number(gameId) || 1,
-          gameCategoryName: gameName || "Game",
-          imageGameCategory: "/images/banner.jpg"
-      },
-      images: []
-    };
-  });
+  const totalPages = 1; // Simplify for now
 
   return (
     <div className="min-h-screen bg-background pb-20 font-sans transition-colors duration-300">
@@ -94,7 +113,7 @@ export default async function AccountListPage({
         {/* Title */}
         <div className="text-center mb-8">
            <h1 className="text-xl md:text-3xl font-bold text-primary uppercase inline-block tracking-tight">
-             Tài Khoản {gameName} - {accountType.display}
+             {title}
            </h1>
            <div className="h-1 w-16 bg-primary mx-auto mt-3 rounded-full opacity-50"></div>
         </div>
@@ -150,9 +169,7 @@ export default async function AccountListPage({
              }>
                 <ListAccountSection
                   accounts={accounts}
-                  gameName={gameName || "Game"}
-                  gameId={Number(gameId)}
-                  type={accountType.slug}
+                  parentSlug={slug}
                 />
             </Suspense>
         </div>
@@ -161,7 +178,7 @@ export default async function AccountListPage({
         {totalPages > 1 && (
         <div className="flex justify-center items-center gap-1.5 mt-6">
              <Link
-                 href={`${GameRoutes.accountList(gameName || "", gameId, type)}?page=${Math.max(1, currentPage - 1)}`}
+                 href={`/${slug}?page=${Math.max(1, currentPage - 1)}`}
                  className={`w-9 h-9 flex items-center justify-center rounded-md border border-border bg-card text-muted-foreground hover:bg-accent hover:text-foreground transition-all ${currentPage <= 1 ? "pointer-events-none opacity-50" : ""}`}
              >
                 <ChevronLeft className="w-4 h-4" />
@@ -169,13 +186,7 @@ export default async function AccountListPage({
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
             <Link
                 key={p}
-                href={
-                `${GameRoutes.accountList(
-                    gameName || "",
-                    gameId,
-                    type
-                )}?page=${p}`
-                }
+                href={`/${slug}?page=${p}`}
                 className={`w-9 h-9 flex items-center justify-center rounded-md border text-xs font-bold transition-all ${
                 p === currentPage
                     ? "bg-primary text-primary-foreground border-primary"
@@ -186,7 +197,7 @@ export default async function AccountListPage({
             </Link>
             ))}
              <Link
-                 href={`${GameRoutes.accountList(gameName || "", gameId, type)}?page=${Math.min(totalPages, currentPage + 1)}`}
+                 href={`/${slug}?page=${Math.min(totalPages, currentPage + 1)}`}
                  className={`w-9 h-9 flex items-center justify-center rounded-md border border-border bg-card text-muted-foreground hover:bg-accent hover:text-foreground transition-all ${currentPage >= totalPages ? "pointer-events-none opacity-50" : ""}`}
              >
                 <ChevronRight className="w-4 h-4" />

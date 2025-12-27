@@ -3,21 +3,17 @@
 import { useState, useMemo } from "react";
 import AccountCard from "@/components/cards/account.card";
 import FilterDropdown from "@/components/ui/filter-dropdown";
-import type { GameAccount } from "@/types/game-account.type";
+import { Account } from "@/types/index.type";
 import { getFilterOptions, applyFilters } from "@/utils/accounts.util";
 
 interface ListAccountSectionProps {
-  accounts: GameAccount[];
-  gameName: string;
-  gameId: number;
-  type: string;
+  accounts: Account[];
+  parentSlug: string;
 }
 
 export default function ListAccountSection({
   accounts,
-  gameName,
-  gameId,
-  type,
+  parentSlug,
 }: ListAccountSectionProps) {
   const { sortOptions, priceFilterOptions, statusFilterOptions } =
     getFilterOptions();
@@ -29,7 +25,7 @@ export default function ListAccountSection({
 
   const filteredAccounts = useMemo(() => {
     const availableAccounts = accounts.filter(
-      (acc) => acc.status === "available"
+      (acc) => acc.status === "AVAILABLE"
     );
     return applyFilters(
       availableAccounts,
@@ -67,7 +63,7 @@ export default function ListAccountSection({
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Nhập từ khóa tìm kiếm..."
+              placeholder="Nhập ID hoặc từ khóa..."
               className="w-full bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-200 text-sm border border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600 focus:border-blue-500 rounded-lg px-4 h-[42px] focus:outline-none transition-all"
             />
           </div>
@@ -138,18 +134,9 @@ export default function ListAccountSection({
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
           {filteredAccounts.map((account) => (
             <AccountCard
-              key={account.gameAccountId}
-              id={account.gameAccountId}
-              gameName={gameName}
-              gameId={gameId}
-              type={type}
-              title={account.title || `Account #${account.gameAccountId}`}
-              description={account.description}
-              originalPrice={Number(account.originalPrice)}
-              actualPrice={Number(account.currentPrice)}
-              status={account.status}
-              coverImage={account.mainImageUrl || "/images/placeholder.jpg"}
-              images={account.images?.map((img) => img.imageUrl) || []}
+              key={account._id}
+              account={account}
+              parentSlug={parentSlug}
             />
           ))}
         </div>

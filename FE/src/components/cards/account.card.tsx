@@ -1,60 +1,50 @@
-"use client";
-
 import Link from "next/link";
-import type { GameAccountStatus } from "@/types/game-account.type";
-import { GameRoutes } from "@/routes";
+import { Account, AccountStatus } from "@/types/index.type";
+import { createSlugHtml } from "@/utils/format-slug.util";
+import Image from "next/image";
 
 interface AccountCardProps {
-  id: number;
-  gameName: string;
-  gameId: number;
-  type: string;
-  title: string;
-  description?: string;
-  originalPrice?: number;
-  actualPrice: number;
-  status: GameAccountStatus;
-  coverImage: string;
-  images?: string[];
+  account: Account;
+  parentSlug: string;
 }
 
 function AccountCard({
-  id,
-  gameName,
-  gameId,
-  type,
-  title,
-  description,
-  actualPrice,
-  status = "available",
-  coverImage,
+  account,
+  parentSlug,
 }: AccountCardProps) {
 
   const statusConfig: Record<
-    GameAccountStatus,
+    AccountStatus,
     { label: string; color: string }
   > = {
-    available: { label: "Sẵn có", color: "bg-green-600" },
-    sold: { label: "Đã bán", color: "bg-red-600" },
-    reserved: { label: "Đã đặt", color: "bg-yellow-600" },
+    AVAILABLE: { label: "Sẵn có", color: "bg-green-600" },
+    SOLD: { label: "Đã bán", color: "bg-red-600" },
+    LOCKED: { label: "Đã khóa", color: "bg-gray-600" },
   };
+
+  const actualPrice = account.price || 0;
+  const coverImage = account.images?.[0]?.url || "/images/placeholder.jpg";
+  const title = account.title || `Account #${account._id}`;
 
   return (
     <div className="group bg-card text-card-foreground rounded-xl overflow-hidden border border-border hover:border-primary/50 hover:shadow-2xl transition-all duration-500 flex flex-col relative">
       {/* Image Container */}
       <div className="p-1.5">
         <div className="relative w-full aspect-[1.8/1] overflow-hidden rounded-lg">
-          <img
+        <Link href={`/${parentSlug}/${createSlugHtml(title, account._id)}`}>
+        <Image
             src={coverImage}
             alt={title}
+            fill
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          />
+          /></Link>
+        
 
           {/* MS ID Badge - Top Right Ribbon Style */}
           <div className="absolute top-0 right-0 z-10">
             <div className="bg-[#ff0080] text-white px-4 py-1.5 font-extrabold text-sm md:text-base relative rounded-bl-xl shadow-lg flex items-center gap-1">
               <span className="text-[10px] md:text-xs">MS:</span>
-              <span>{id}</span>
+              <span>{account._id}</span>
               {/* Optional Ribbon fold effect */}
               <div className="absolute top-full right-0 w-0 h-0 border-l-[6px] border-l-transparent border-t-[6px] border-t-[#c20061]"></div>
             </div>
@@ -73,14 +63,18 @@ function AccountCard({
                 { bg: "bg-[#ffb800]", text: "text-white" }, // Yellow
                 { bg: "bg-[#e11d48]", text: "text-white" }, // Red
             ];
-            const color = colors[id % colors.length];
+            
+            // Bulletproof index calculation for any ID format
+            const rawId = account._id?.toString().replace(/\D/g, '') || '0';
+            const parsedId = parseInt(rawId) || 0;
+            const color = colors[Math.abs(parsedId) % colors.length] || colors[0];
             return (
                 <div className="mb-4">
                      <div className={`inline-flex items-center gap-1.5 ${color.bg} ${color.text} px-3 py-1.5 rounded-lg font-extrabold text-[10px] shadow-sm group-hover:shadow-md transition-shadow uppercase`}>
                         <svg viewBox="0 0 24 24" fill="none" className="w-3 h-3" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
                             <polyline points="20 6 9 17 4 12"></polyline>
                         </svg>
-                        Trắng thông tin
+                        {account.rank || "Trắng thông tin"}
                      </div>
                 </div>
             )
@@ -102,15 +96,7 @@ function AccountCard({
 
             {/* View Details Button */}
             <Link
-                href={
-                    GameRoutes.accountDetail(
-                    gameName,
-                    gameId,
-                    type,
-                    description || title,
-                    id
-                    )
-                }
+                href={`/${parentSlug}/${createSlugHtml(title, account._id)}`}
                 className="flex-[1.2] h-[30px] bg-[#5c7af7] hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-500 text-white font-bold rounded-sm transition-all duration-300 flex items-center justify-center gap-2 text-[10px] shadow-md hover:shadow-lg active:scale-95"
             >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
