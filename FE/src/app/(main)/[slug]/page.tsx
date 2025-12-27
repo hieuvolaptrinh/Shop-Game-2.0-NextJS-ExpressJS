@@ -80,7 +80,7 @@ export default async function AccountListPage({
   if (accountType) {
     title = accountType.name;
     displayType = accountType.slug;
-    accounts = MOCK_ACCOUNTS.filter(acc => acc.typeId === accountType._id);
+    accounts = MOCK_ACCOUNTS.filter(acc => acc.typeId === accountType._id && acc.status === "AVAILABLE");
   } else {
     // 2. Check if it's a Category Slug (Layer 1)
     const category = MOCK_ACCOUNT_CATEGORIES.find(cat => cat.slug === slug);
@@ -88,7 +88,7 @@ export default async function AccountListPage({
        title = category.name;
        displayType = category.slug;
        const typeIds = MOCK_ACCOUNT_TYPES.filter(t => t.categoryId === category._id).map(t => t._id);
-       accounts = MOCK_ACCOUNTS.filter(acc => typeIds.includes(acc.typeId));
+       accounts = MOCK_ACCOUNTS.filter(acc => typeIds.includes(acc.typeId) && acc.status === "AVAILABLE");
     } else {
        // 3. Fallback to Game ID parsing
        if (!gameId) {
@@ -98,8 +98,9 @@ export default async function AccountListPage({
        title = `Tài Khoản ${gameName}`;
        displayType = "normal";
        accounts = MOCK_ACCOUNTS.filter(acc => 
-          acc.type?.name.toUpperCase().includes(gameName.toUpperCase()) || 
-          acc.typeId.includes(gameId.toString())
+          (acc.type?.name.toUpperCase().includes(gameName.toUpperCase()) || 
+          acc.typeId.includes(gameId.toString())) &&
+          acc.status === "AVAILABLE"
        );
     }
   }

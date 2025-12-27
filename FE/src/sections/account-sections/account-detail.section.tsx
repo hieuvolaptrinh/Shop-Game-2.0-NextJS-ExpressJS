@@ -15,6 +15,10 @@ import {
   ShieldAlert,
   ChevronLeft,
   ChevronRight,
+  Swords,
+  Trophy,
+  Star,
+  Gem,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -148,34 +152,104 @@ function AccountDetailSection({
               </h3>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+              {/* Champion Count */}
               <div className="bg-muted/30 border border-border rounded-lg p-3 flex items-center gap-3">
                 <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary">
-                  <ShieldCheck className="w-5 h-5" />
+                  <Swords className="w-5 h-5" />
                 </div>
                 <div>
                   <p className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wider leading-none mb-1">
-                    Bảo mật
+                    Tướng
                   </p>
-                  <p className="text-xs font-semibold text-foreground">
-                    Trắng Thông Tin 100%
+                  <p className="text-xs font-bold text-foreground">
+                    {account.generalCount || 0}
                   </p>
                 </div>
               </div>
+
+              {/* Skin Count */}
               <div className="bg-muted/30 border border-border rounded-lg p-3 flex items-center gap-3">
-                <div className="w-10 h-10 bg-green-500/10 rounded-lg flex items-center justify-center text-green-500">
+                <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary">
+                  <Trophy className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wider leading-none mb-1">
+                    Trang phục
+                  </p>
+                  <p className="text-xs font-bold text-foreground">
+                    {account.skinCount || 0}
+                  </p>
+                </div>
+              </div>
+
+              {/* Security / Linked Info */}
+              <div className="bg-muted/30 border border-border rounded-lg p-3 flex items-center gap-3">
+                <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary shrink-0">
+                  <ShieldCheck className="w-5 h-5" />
+                </div>
+                <div className="flex flex-col gap-0.5 min-w-0">
+                  <p className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wider leading-none mb-1">
+                    Bảo mật
+                  </p>
+                  <div className="text-[11px] font-bold leading-tight">
+                    {(() => {
+                      const info = account.linkedInfo;
+                      const linked = [];
+                      if (info?.emailLinked) linked.push("Email");
+                      if (info?.phoneLinked) linked.push("SĐT");
+                      if (info?.facebookLinked) linked.push("Facebook");
+
+                      if (linked.length === 0) {
+                        return <span className="text-green-600">Trắng Thông tin</span>;
+                      }
+                      return (
+                        <span className="text-destructive break-words">
+                          Đã LK: {linked.join(", ")}
+                        </span>
+                      );
+                    })()}
+                  </div>
+                </div>
+              </div>
+
+              {/* Status */}
+              <div className="bg-muted/30 border border-border rounded-lg p-3 flex items-center gap-3">
+                <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary">
                   <CheckCircle2 className="w-5 h-5" />
                 </div>
                 <div>
                   <p className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wider leading-none mb-1">
                     Trạng thái
                   </p>
-                  <p className="text-xs font-semibold text-green-600 dark:text-green-400">
-                    Sẵn sàng giao dịch
+                  <p className="text-xs font-bold text-foreground">
+                    Sẵn sàng
                   </p>
                 </div>
               </div>
             </div>
+
+            {/* Features Spotlight */}
+            {account.features && account.features.length > 0 && (
+              <div className="mb-6">
+                <div className="flex items-center gap-2 mb-3">
+                   <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                   <h4 className="text-sm font-bold uppercase tracking-tight text-foreground/70">Vật phẩm nổi bật</h4>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                   {account.features.map((feature, idx) => (
+                     <div key={idx} className="flex items-center gap-2 bg-gradient-to-br from-muted/50 to-muted border border-border px-3 py-2 rounded-lg shadow-sm">
+                        <span className="text-xs font-bold text-foreground/90">{feature.name}</span>
+                        <span className={cn(
+                          "text-[9px] font-black px-1.5 py-0.5 rounded italic",
+                          feature.type === "SSS" ? "bg-red-500/20 text-red-600" : 
+                          feature.type === "SS" ? "bg-yellow-500/20 text-yellow-600" : "bg-yellow-500/20 text-yellow-600"
+                        )}>{feature.type}</span>
+                     </div>
+                   ))}
+                </div>
+              </div>
+            )}
 
             <div className="prose prose-sm dark:prose-invert max-w-none bg-muted/10 p-4 rounded-lg border border-border/40">
               <p className="whitespace-pre-line leading-relaxed text-sm text-foreground/80">
@@ -248,23 +322,13 @@ function AccountDetailSection({
                   <span>THANH TOÁN NGAY</span>
                 </button>
 
-                <button className="w-full bg-card hover:bg-muted border border-border text-foreground font-semibold py-2.5 rounded-md transition-all flex items-center justify-center gap-2 text-sm">
+                <button className="w-full bg-card hover:bg-muted border border-border text-foreground font-medium py-2.5 rounded-md transition-all flex items-center justify-center gap-2 text-sm">
                   <Info className="w-4 h-4 text-primary" />
                   <span>Hướng dẫn mua hàng</span>
                 </button>
 
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    className="bg-blue-600/10 hover:bg-blue-600/15 text-blue-600 dark:text-blue-400 font-semibold py-2 rounded-md transition-all flex items-center justify-center gap-1.5 border border-blue-600/20 text-xs"
-                    onClick={() =>
-                      window.open("https://m.me/yourlink", "_blank")
-                    }
-                  >
-                    <MessageCircle className="w-3.5 h-3.5" />
-                    Messenger
-                  </button>
-                  <button
-                    className="bg-green-600/10 hover:bg-green-600/15 text-green-600 dark:text-green-400 font-semibold py-2 rounded-md transition-all flex items-center justify-center gap-1.5 border border-green-600/20 text-xs"
+                 <button
+                    className="w-full bg-card hover:bg-muted border border-border text-foreground font-medium py-2.5 rounded-md transition-all flex items-center justify-center gap-2 text-sm"
                     onClick={() => window.open("https://zalo.me", "_blank")}
                   >
                     <img
@@ -274,7 +338,6 @@ function AccountDetailSection({
                     />
                     Zalo Hỗ Trợ
                   </button>
-                </div>
               </>
             ) : (
               <div className="p-4 bg-destructive/5 border border-destructive/10 rounded-md text-center">

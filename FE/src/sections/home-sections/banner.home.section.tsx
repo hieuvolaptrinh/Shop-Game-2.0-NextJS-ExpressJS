@@ -82,7 +82,7 @@ export default function BannerHomeSection() {
                     <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary shrink-0"></span>
                     <span>
                         Acc đã bán rồi shop không lưu giữ tkmk nữa, Hệ thống tự động xóa, vì vậy mọi người tự lưu lại và đổi mật khẩu thêm thông tin cần thiết sau khi mua acc 
-                        <span className="bg-destructive/10 text-destructive px-1.5 py-0.5 rounded font-bold mx-1 text-sm border border-destructive/20">LƯU Ý: Acc mua về phải thay mật khẩu luôn không thay mất tự chịu</span> 
+                        <span className=" text-destructive px-1.5 py-0.5 font-bold mx-1 text-sm ">LƯU Ý: Acc mua về phải thay mật khẩu luôn không thay mất tự chịu</span> 
                         <a href="#" className="text-primary hover:underline font-bold">BẤM VÀO ĐÂY ĐỂ ĐỔI MẬT KHẨU</a>
                     </span>
                 </p>
@@ -100,7 +100,7 @@ export default function BannerHomeSection() {
                     ].map((item, i) => (
                         <p key={i} className="flex items-center justify-between bg-muted/30 p-2.5 rounded-lg border border-border/30 hover:bg-muted/50 transition-all cursor-pointer">
                             <span className="font-bold text-destructive truncate mr-2">{item.name}</span>
-                            <a href="#" className="shrink-0 bg-primary/10 text-primary px-3 py-1 rounded-md font-bold text-xs border border-primary/20 hover:bg-primary hover:text-primary-foreground transition-all">MUA NGAY</a>
+                            <a href="#" className="shrink-0 text-primary px-3 py-1 rounded-md font-bold text-xs border border-primary/20 hover:bg-primary hover:text-primary-foreground transition-all">MUA NGAY</a>
                         </p>
                     ))}
                 </div>

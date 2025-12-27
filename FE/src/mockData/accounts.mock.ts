@@ -2,16 +2,16 @@ import { Account } from "@/types/index.type";
 import { MOCK_ACCOUNT_TYPES } from "./account-types.mock";
 
 const skinLienQuan = [
-  { name: "Capheny Càn Nguyên Điện Chủ", type: "3S" },
-  { name: "Tulen Chí Tôn Kiếm Tiên", type: "3S" },
-  { name: "Nakroth Thứ Nguyên Vệ Thần", type: "3S" },
-  { name: "Airi Bích Hải Thánh Nữ", type: "3S" },
-  { name: "Lauriel Thứ Nguyên Vệ Thần", type: "3S" },
-  { name: "Raz Chiến Thần Muay Thái", type: "2S" },
-  { name: "Liliana Nguyệt Mị Ly", type: "2S" },
-  { name: "Valhein Vũ Khí Tối Thượng", type: "2S" },
-  { name: "Yorn Thế Tử Nguyệt Tộc", type: "2S" },
-  { name: "Murad Siêu Việt", type: "2S" }
+  { name: "Capheny Càn Nguyên Điện Chủ", type: "SSS" },
+  { name: "Tulen Chí Tôn Kiếm Tiên", type: "SSS" },
+  { name: "Nakroth Thứ Nguyên Vệ Thần", type: "SSS" },
+  { name: "Airi Bích Hải Thánh Nữ", type: "SSS" },
+  { name: "Lauriel Thứ Nguyên Vệ Thần", type: "SSS" },
+  { name: "Raz Chiến Thần Muay Thái", type: "SS" },
+  { name: "Liliana Nguyệt Mị Ly", type: "SS" },
+  { name: "Valhein Vũ Khí Tối Thượng", type: "SS" },
+  { name: "Yorn Thế Tử Nguyệt Tộc", type: "SS" },
+  { name: "Murad Siêu Việt", type: "SS" }
 ];
 
 export const MOCK_ACCOUNTS: Account[] = [
@@ -28,6 +28,7 @@ export const MOCK_ACCOUNTS: Account[] = [
     features: [skinLienQuan[2], skinLienQuan[4], skinLienQuan[5]],
     description: "Tài khoản Chiến Thần cực khét, full tướng full ngọc, skin 3S xịn xò.",
     status: "AVAILABLE",
+    linkedInfo: { emailLinked: false, phoneLinked: false, facebookLinked: false },
     createdAt: new Date().toISOString(),
   },
   {
@@ -42,6 +43,7 @@ export const MOCK_ACCOUNTS: Account[] = [
     features: [skinLienQuan[6], skinLienQuan[9]],
     description: "Acc rank Cao Thủ, trắng thông tin, Liliana Nguyệt Mị Ly.",
     status: "AVAILABLE",
+    linkedInfo: { emailLinked: false, phoneLinked: false, facebookLinked: false },
     createdAt: new Date().toISOString(),
   },
 
@@ -58,6 +60,7 @@ export const MOCK_ACCOUNTS: Account[] = [
     features: [skinLienQuan[7]],
     description: "Acc Reg mới, trắng thông tin 100%, có sẵn skin Valhein VT.",
     status: "AVAILABLE",
+    linkedInfo: { emailLinked: false, phoneLinked: false, facebookLinked: true },
     createdAt: new Date().toISOString(),
   },
   {
@@ -72,6 +75,7 @@ export const MOCK_ACCOUNTS: Account[] = [
     features: [],
     description: "Acc reg trắng thông tin, phù hợp cho người chơi mới.",
     status: "AVAILABLE",
+    linkedInfo: { emailLinked: false, phoneLinked: false, facebookLinked: false },
     createdAt: new Date().toISOString(),
   },
 
@@ -86,6 +90,7 @@ export const MOCK_ACCOUNTS: Account[] = [
     features: [],
     description: "Thử vận may với túi mù Liên Quân, tỉ lệ trúng skin cực phẩm.",
     status: "AVAILABLE",
+    linkedInfo: { emailLinked: false, phoneLinked: false, facebookLinked: false },
     createdAt: new Date().toISOString(),
   },
   {
@@ -98,6 +103,7 @@ export const MOCK_ACCOUNTS: Account[] = [
     features: [],
     description: "Túi mù cao cấp, tăng tỉ lệ trúng nick rank cao.",
     status: "AVAILABLE",
+    linkedInfo: { emailLinked: false, phoneLinked: false, facebookLinked: false },
     createdAt: new Date().toISOString(),
   },
 
@@ -112,6 +118,7 @@ export const MOCK_ACCOUNTS: Account[] = [
     features: [],
     description: "Random Liên Quân giá rẻ nhất thị trường.",
     status: "AVAILABLE",
+    linkedInfo: { emailLinked: false, phoneLinked: false, facebookLinked: false },
     createdAt: new Date().toISOString(),
   },
   {
@@ -124,6 +131,7 @@ export const MOCK_ACCOUNTS: Account[] = [
     features: [],
     description: "Random Liên Quân 19k, cơ hội nhận nick nhiều tướng.",
     status: "AVAILABLE",
+    linkedInfo: { emailLinked: false, phoneLinked: false, facebookLinked: false },
     createdAt: new Date().toISOString(),
   }
 ];

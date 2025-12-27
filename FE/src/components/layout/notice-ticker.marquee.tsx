@@ -31,7 +31,7 @@ export default function NoticeTicker() {
           {[...Array(10)].map((_, i) => (
             <div key={i} className="flex items-center mx-8">
               <span className="text-primary font-bold text-lg mr-2">🔔 [SHOP]</span>
-              <span className="text-foreground font-bold text-sm sm:text-base uppercase tracking-tight">UY TÍN - GIÁ RẺ - CHẤT LƯỢNG</span>
+              <span className="text-foreground font-semibold text-sm sm:text-base uppercase tracking-tight">UY TÍN - GIÁ RẺ - CHẤT LƯỢNG</span>
             </div>
           ))}
         </div>

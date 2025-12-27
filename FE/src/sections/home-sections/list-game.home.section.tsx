@@ -6,7 +6,7 @@ import { AccountTypeCard } from "@/components/cards/account-type.card";
 
 function ListGameHomeSection() {
   const getAccountCountByType = (typeId: string) => {
-    return MOCK_ACCOUNTS.filter(acc => acc.typeId === typeId).length;
+    return MOCK_ACCOUNTS.filter(acc => acc.typeId === typeId && acc.status === "AVAILABLE").length;
   };
 
   return (

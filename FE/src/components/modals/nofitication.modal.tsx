@@ -65,7 +65,7 @@ export default function NotificationModal() {
         <div className="p-6 pt-2 flex justify-center">
           <button
             onClick={() => setIsOpen(false)}
-            className="bg-[#8b5cf6] cursor-pointer hover:bg-[#7c3aed] text-white font-bold py-2 px-10 rounded-lg shadow-lg shadow-purple-200 transform hover:scale-105 transition-all text-lg"
+            className="bg-[#8b5cf6] cursor-pointer hover:bg-[#7c3aed] text-white font-bold py-2 px-10 rounded-xs shadow-lg shadow-purple-200 transform hover:scale-105 transition-all text-lg"
           >
             OK
           </button>

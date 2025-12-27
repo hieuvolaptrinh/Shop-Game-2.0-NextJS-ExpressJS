@@ -71,7 +71,7 @@ function Footer() {
         <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
           <h3 className="text-lg md:text-xl font-bold text-foreground mb-4 flex items-center gap-2">
             <Users className="w-5 h-5 text-blue-500" />
-            Tham gia nhóm Discord
+            Tham gia nhóm Zalo  
           </h3>
           <a
             href={""}

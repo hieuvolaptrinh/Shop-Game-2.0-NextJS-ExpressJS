@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Account, AccountStatus } from "@/types/index.type";
 import { createSlugHtml } from "@/utils/format-slug.util";
 import Image from "next/image";
+import { GameRoutes } from "@/routes";
 
 interface AccountCardProps {
   account: Account;
@@ -17,7 +18,7 @@ function AccountCard({
     AccountStatus,
     { label: string; color: string }
   > = {
-    AVAILABLE: { label: "Sẵn có", color: "bg-green-600" },
+    AVAILABLE: { label: "Có sẵn", color: "bg-green-600" },
     SOLD: { label: "Đã bán", color: "bg-red-600" },
     LOCKED: { label: "Đã khóa", color: "bg-gray-600" },
   };
@@ -26,20 +27,37 @@ function AccountCard({
   const coverImage = account.images?.[0]?.url || "/images/placeholder.jpg";
   const title = account.title || `Account #${account._id}`;
 
+  const isQuickBuy = account.type?.categoryId === "cat-lucky" || account.type?.categoryId === "cat-random";
+  
+  const detailLink = isQuickBuy 
+    ? GameRoutes.accountPayment(account.type?.name || "Game", account.typeId, account.type?.slug || "normal", title, account._id)
+    : `/${parentSlug}/${createSlugHtml(title, account._id)}`;
+
   return (
     <div className="group bg-card text-card-foreground rounded-xl overflow-hidden border border-border hover:border-primary/50 hover:shadow-2xl transition-all duration-500 flex flex-col relative">
       {/* Image Container */}
       <div className="p-1.5">
         <div className="relative w-full aspect-[1.8/1] overflow-hidden rounded-lg">
-        <Link href={`/${parentSlug}/${createSlugHtml(title, account._id)}`}>
-        <Image
-            src={coverImage}
-            alt={title}
-            fill
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          /></Link>
+          {isQuickBuy ? (
+            <div className="w-full h-full relative group-hover:scale-105 transition-transform duration-500">
+               <Image
+                src={coverImage}
+                alt={title}
+                fill
+                className="object-cover"
+              />
+            </div>
+          ) : (
+            <Link href={detailLink}>
+              <Image
+                src={coverImage}
+                alt={title}
+                fill
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+            </Link>
+          )}
         
-
           {/* MS ID Badge - Top Right Ribbon Style */}
           <div className="absolute top-0 right-0 z-10">
             <div className="bg-[#ff0080] text-white px-4 py-1.5 font-extrabold text-sm md:text-base relative rounded-bl-xl shadow-lg flex items-center gap-1">
@@ -94,15 +112,28 @@ function AccountCard({
                 </div>
             </div>
 
-            {/* View Details Button */}
+            {/* Action Button */}
             <Link
-                href={`/${parentSlug}/${createSlugHtml(title, account._id)}`}
-                className="flex-[1.2] h-[30px] bg-[#5c7af7] hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-500 text-white font-bold rounded-sm transition-all duration-300 flex items-center justify-center gap-2 text-[10px] shadow-md hover:shadow-lg active:scale-95"
+                href={detailLink}
+                className={`flex-[1.2] h-[30px] font-bold rounded-sm transition-all duration-300 flex items-center justify-center gap-2 text-[10px] shadow-md hover:shadow-lg active:scale-95 ${
+                    isQuickBuy ? "bg-orange-600 hover:bg-orange-700 text-white" : "bg-[#5c7af7] hover:bg-blue-600 text-white"
+                }`}
             >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
-                    <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-                Chi Tiết
+                {isQuickBuy ? (
+                    <>
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                            <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                        </svg>
+                        MUA NGAY
+                    </>
+                ) : (
+                    <>
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                            <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                        CHI TIẾT
+                    </>
+                )}
             </Link>
         </div>
       </div>
