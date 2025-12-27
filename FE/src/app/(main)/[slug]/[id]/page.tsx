@@ -49,10 +49,8 @@ export default async function AccountDetailPage({
 }) {
   const { slug, id } = await params;
   
-  // Parse account ID từ slug format: account-name-123.html
   const accountId = parseSlugId(id);
 
-  // Parse type and gameName from URL slug
   const { gameName, gameId, type } = parseOneLevelSlug(slug);
   const accountType = normalizeAccountType(type);
   if (!accountType) {

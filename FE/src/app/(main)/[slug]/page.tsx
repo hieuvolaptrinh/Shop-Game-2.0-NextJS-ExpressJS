@@ -6,7 +6,6 @@ import Image from "next/image";
 import type { GameAccount } from "@/types/game-account.type";
 import type { Metadata } from "next";
 import { Suspense } from "react";
-
 import { 
   ShieldCheck, 
   ShieldAlert, 
@@ -15,7 +14,6 @@ import {
   ChevronRight, 
   ArrowRight 
 } from "lucide-react";
-
 import {
   parseOneLevelSlug,
   normalizeAccountType,
@@ -55,19 +53,15 @@ export default async function AccountListPage({
 
   let { gameName, gameId, type } = parseOneLevelSlug(slug);
 
-  // Fallback defaults if parsing fails (Force Load)
   if (!gameId) gameId = 1; 
   if (!type) type = "acc-reg";
-  if (!gameName) gameName = slug; // Use the slug as name if parsing failed
+  if (!gameName) gameName = slug;
 
   const accountType = normalizeAccountType(type);
 
-  // Use mock data directly
-  let totalPages = 3; // Fixed for demo
+  let totalPages = 3;
 
-  /* MOCK DATA GENERATION */
   const accounts: any[] = Array.from({ length: 12 }).map((_, i) => {
-    // Generate some random looking IDs like in the screenshots
     const mockId = 1000000 + Math.floor(Math.random() * 9000000);
     const mockPrices = [170000, 220000, 199999, 1399999, 80000, 110000, 450000, 300000];
     const price = mockPrices[i % mockPrices.length];

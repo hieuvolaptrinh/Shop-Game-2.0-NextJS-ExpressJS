@@ -2,16 +2,16 @@ import { LoginForm } from "@/components/forms/login.form";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Login - Sign In to Your Account",
+  title: "Đăng Nhập",
   description:
-    "Log in to Best Game Account Store to access your gaming accounts, track orders, and manage your purchases. Secure login with instant access.",
+    "Đăng nhập vào hệ thống Shop Tài Khoản Game Uy Tín để truy cập các tài khoản đã mua, theo dõi đơn hàng và quản lý thông tin cá nhân. An toàn và bảo mật tuyệt đối.",
   robots: {
     index: false,
     follow: true,
   },
   openGraph: {
-    title: "Login to Best Game Account Store",
-    description: "Access your gaming account marketplace",
+    title: "Đăng Nhập - Shop Tài Khoản Game Uy Tín",
+    description: "Truy cập vào hệ thống website mua bán acc game cao cấp.",
     type: "website",
   },
 };

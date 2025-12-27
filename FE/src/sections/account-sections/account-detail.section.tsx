@@ -38,7 +38,6 @@ function AccountDetailSection({
     : 0;
 
   const handleBuyNow = () => {
-    // Auth check removed as requested
     router.push(
       GameRoutes.accountPayment(
         gameName,

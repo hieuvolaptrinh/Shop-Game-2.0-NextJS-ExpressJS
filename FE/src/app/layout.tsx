@@ -14,35 +14,27 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: {
     default:
-      "Shop Tài Khoản Game Uy Tín - Cửa Hàng Tài Khoản Game Cao Cấp | Liên Quân, Genshin Impact & Nhiều Game Khác",
+      "Shop Tài Khoản Game Uy Tín - Cửa Hàng Tài Khoản Game Cao Cấp | Liên Quân",
     template: "%s | Shop Tài Khoản Game Uy Tín",
   },
   description:
-    "Mua tài khoản game cao cấp: Liên Quân Mobile, Genshin Impact, Arknights, Mobile Legends, Honkai Star Rail, Wuthering Waves & nhiều game khác. Giao hàng ngay lập tức, giao dịch an toàn, hỗ trợ trọn đời. Được tin tưởng bởi hơn 50.000 game thủ.",
+    "Mua tài khoản game cao cấp: Liên Quân Mobile. Giao hàng ngay lập tức, giao dịch an toàn, hỗ trợ trọn đời. Được tin tưởng bởi hơn 50.000 game thủ.",
   keywords: [
     "mua tài khoản game",
     "bán tài khoản game uy tín",
     "acc liên quân mobile",
-    "shop acc liên minh",
     "shop acc uy tín",
     "mua acc game giá rẻ",
-    "tài khoản genshin impact",
-    "tài khoản arknights",
-    "tài khoản mobile legends",
-    "tài khoản honkai star rail",
-    "tài khoản wuthering waves",
     "tài khoản game cao cấp",
     "xác thực tài khoản game",
     "giao hàng ngay lập tức",
     "cửa hàng game an toàn",
-    "mua tài khoản lol",
     "acc game giá rẻ",
     "tài khoản game hiếm",
     "thị trường tài khoản game",
     "người bán game uy tín",
     "shop tài khoản game",
     "mua acc online",
-    "tài khoản game mmo",
     "tài khoản game moba",
   ],
   authors: [
@@ -105,7 +97,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: "your-google-verification-code", // Thêm sau khi đăng ký với Google Search Console
+    google: "your-google-verification-code",
   },
   category: "gaming",
   applicationName: "Shop Tài Khoản Game Uy Tín",

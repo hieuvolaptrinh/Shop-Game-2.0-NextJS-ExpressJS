@@ -8,12 +8,11 @@ import NotificationModal from "@/components/modals/nofitication.modal";
 export const metadata: Metadata = {
   title: "Shop Tài Khoản Game Uy Tín - Mua Bán Acc Game Cao Cấp",
   description:
-    "Mua bán tài khoản game uy tín: Liên Quân Mobile, Liên Minh Huyền Thoại, Genshin Impact, Free Fire & nhiều game khác. Giao dịch tự động, nhận acc ngay, bảo hành trọn đời. Hỗ trợ 24/7.",
+    "Mua bán tài khoản game uy tín: Liên Quân Mobile. Giao dịch tự động, nhận acc ngay, bảo hành trọn đời. Hỗ trợ 24/7.",
   keywords: [
     "mua acc game",
     "shop acc uy tin",
     "acc lien quan mobile",
-    "acc genshin impact",
     "mua ban tai khoan game",
   ],
   openGraph: {

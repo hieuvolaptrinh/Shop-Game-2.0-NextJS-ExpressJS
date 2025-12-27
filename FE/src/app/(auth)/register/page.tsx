@@ -2,22 +2,22 @@ import { RegisterForm } from "@/components/forms/register.form";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Register - Create Your Account",
+  title: "Đăng Ký Tài Khoản",
   description:
-    "Create a new account at Best Game Account Store. Join thousands of gamers and get access to premium gaming accounts with secure transactions and instant delivery.",
+    "Tạo tài khoản mới tại Shop Tài Khoản Game Uy Tín. Gia nhập cộng đồng hàng ngàn game thủ để sở hữu các tài khoản game cao cấp với giao dịch an toàn và nhận thông tin ngay lập tức.",
   keywords: [
-    "register gaming account",
-    "create account",
-    "sign up game store",
-    "join gaming marketplace",
+    "đăng ký tài khoản game",
+    "tạo tài khoản shop game",
+    "đăng ký mua acc",
+    "gia nhập cộng đồng game thủ",
   ],
   robots: {
     index: false,
     follow: true,
   },
   openGraph: {
-    title: "Register at Best Game Account Store",
-    description: "Join the most trusted gaming accounts marketplace",
+    title: "Đăng Ký Thành Viên - Shop Tài Khoản Game Uy Tín",
+    description: "Trở thành thành viên của hệ thống mua bán tài khoản game tin cậy nhất.",
     type: "website",
   },
 };
