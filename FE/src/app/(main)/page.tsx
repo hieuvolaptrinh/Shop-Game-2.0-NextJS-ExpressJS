@@ -1,7 +1,7 @@
 import ListGameHomeSection from "@/sections/home-sections/list-game.home.section";
 import Image from "next/image";
 import type { Metadata } from "next";
-import SnowEffect from "@/components/layout/SnowEffect";
+
 import BannerHomeSection from "@/sections/home-sections/banner.home.section";
 import NotificationModal from "@/components/modals/nofitication.modal";
 
@@ -25,18 +25,15 @@ export const metadata: Metadata = {
   },
 };
 
-
-
 export default function Home() {
   return (
     <>
       <NotificationModal />
-      <SnowEffect />
 
       {/* Content */}
       <div className="relative z-10 min-h-screen pb-20">
         <div className="w-full flex flex-col items-center pt-8">
-            <BannerHomeSection />
+          <BannerHomeSection />
         </div>
 
         {/* Existing Sections */}

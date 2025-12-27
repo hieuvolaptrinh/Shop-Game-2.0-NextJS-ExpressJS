@@ -157,7 +157,9 @@ export default function ListAccountSection({
         <div className="text-center py-20 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-xl transition-colors duration-300">
           <div className="text-6xl mb-4">🔍</div>
           <p className="text-gray-400 text-lg mb-2">Không tìm thấy kết quả</p>
-          <p className="text-gray-500 text-sm mb-4">Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm của bạn</p>
+          <p className="text-gray-500 text-sm mb-4">
+            Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm của bạn
+          </p>
           {hasActiveFilters && (
             <button
               onClick={handleResetFilters}

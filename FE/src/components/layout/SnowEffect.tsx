@@ -25,7 +25,7 @@ export default function SnowEffect() {
     const maxParticles = 100;
 
     // Force snow to be white for both themes
-    const snowflakeColor = "rgba(255, 255, 255, 0.7)";
+    const snowflakeColor = "rgba(252, 240, 3, 0.7)";
 
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
@@ -47,17 +47,17 @@ export default function SnowEffect() {
 
     const drawSnowflakes = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
+
       for (let i = 0; i < maxParticles; i++) {
         const p = particles[i];
-        
+
         ctx.beginPath();
         ctx.fillStyle = snowflakeColor;
         ctx.moveTo(p.x, p.y);
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2, true);
         ctx.fill();
       }
-      
+
       updateSnowflakes();
     };
 
